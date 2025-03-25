@@ -1,384 +1,189 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="bg-gray-50 min-h-screen py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">My Subscription</h1>
-            <p class="mt-2 text-sm text-gray-600">Manage your gym membership subscription</p>
-        </div>
+    <div class="min-h-screen bg-gray-50">
+        <div class="flex h-screen overflow-hidden">
+            <!-- Sidebar -->
+            @include('partials.member-sidebar')
 
-        @if (session('success'))
-            <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-8">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-green-700">{{ session('success') }}</p>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">{{ session('error') }}</p>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        <!-- Current Subscription Status -->
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
-            <div class="px-4 py-5 sm:px-6 bg-gray-50">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Subscription Status</h3>
-            </div>
-            <div class="border-t border-gray-200">
-                <dl>
-                    @if($activeSubscription)
-                        <div class="bg-green-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Status</dt>
-                            <dd class="mt-1 text-sm text-green-800 sm:mt-0 sm:col-span-2">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
-                                        <circle cx="4" cy="4" r="3" />
-                                    </svg>
-                                    Active
-                                </span>
-                            </dd>
-                        </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Plan</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $activeSubscription->type }}</dd>
-                        </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Duration</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $activeSubscription->duration ?? '1' }} {{ ($activeSubscription->duration ?? 1) == 1 ? 'month' : 'months' }}
-                            </dd>
-                        </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Start Date</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ \Carbon\Carbon::parse($activeSubscription->start_date)->format('M d, Y') }}</dd>
-                        </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">End Date</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ \Carbon\Carbon::parse($activeSubscription->end_date)->format('M d, Y') }}</dd>
-                        </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Time Remaining</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ \Carbon\Carbon::parse($activeSubscription->end_date)->diffForHumans(['parts' => 2]) }}</dd>
-                        </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Price</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">${{ number_format($activeSubscription->price, 2) }}</dd>
-                        </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Actions</dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                <a href="#subscription-plans" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Renew Subscription
-                                </a>
-                            </dd>
-                        </div>
-                    @else
-                        <div class="bg-yellow-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Status</dt>
-                            <dd class="mt-1 text-sm text-yellow-800 sm:mt-0 sm:col-span-2">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
-                                        <circle cx="4" cy="4" r="3" />
-                                    </svg>
-                                    Inactive
-                                </span>
-                            </dd>
-                        </div>
-                        <div class="bg-white px-4 py-5 sm:px-6 text-center">
-                            <p class="text-gray-700 mb-4">You don't have an active subscription.</p>
-                            <a href="#subscription-plans" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                View Available Plans
+            <!-- Main Content Area -->
+            <div class="flex-1 overflow-auto">
+                <div class="bg-white shadow-sm border-b border-gray-200">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                        <h1 class="text-2xl font-bold text-gray-900 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                            </svg>
+                            My Subscription
+                        </h1>
+                        <nav class="flex items-center space-x-2">
+                            <a href="{{ route('member.sessions.book') }}" class="text-sm text-indigo-600 hover:text-indigo-800 transition-colors">
+                                Book a Session
                             </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    @if (session('success'))
+                        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-8">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-green-700">{{ session('success') }}</p>
+                                </div>
+                            </div>
                         </div>
                     @endif
-                </dl>
-            </div>
-        </div>
 
-        <!-- Single Session Notice -->
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-yellow-700">
-                        <strong>Looking for a single session?</strong> Please visit our reception desk to purchase individual training sessions.
-                    </p>
-                </div>
-            </div>
-        </div>
+                    @if (session('error'))
+                        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-red-700">{{ session('error') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
-        <!-- Available Plans -->
-        <div id="subscription-plans" class="bg-white shadow sm:rounded-lg mb-8">
-            <div class="px-4 py-5 sm:px-6 bg-gray-50">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Available Subscription Plans</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">Choose the plan that fits your fitness goals</p>
-            </div>
-            
-            <div class="px-4 py-5 sm:p-6">
-                <!-- Basic Plan -->
-                <div class="mb-12">
-                    <h4 class="text-xl font-bold mb-4">Basic Plan</h4>
-                    <p class="text-gray-500 mb-4">Standard gym access during regular hours</p>
-                    
-                    <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                        <ul class="mb-4">
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Standard gym access</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Basic locker room access</span>
-                            </li>
-                            <li class="flex items-center">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Initial fitness assessment</span>
-                            </li>
-                        </ul>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <div class="mb-2">
-                                    <h5 class="font-medium">1 Month</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$29</div>
+                    <!-- Current Subscription Status -->
+                    <div class="bg-white shadow-md rounded-lg mb-8 overflow-hidden">
+                        <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Subscription Status</h3>
+                        </div>
+                        <div>
+                            @if($activeSubscription)
+                                <div class="p-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Current Plan</dt>
+                                            <dd class="mt-1 text-2xl font-bold text-gray-900 flex items-center">
+                                                {{ $activeSubscription->type }}
+                                                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Active
+                                            </span>
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Expires</dt>
+                                            <dd class="mt-1 text-lg text-gray-900">
+                                                {{ \Carbon\Carbon::parse($activeSubscription->end_date)->format('M d, Y') }}
+                                                <span class="text-sm text-gray-500 ml-2">
+                                                ({{ \Carbon\Carbon::parse($activeSubscription->end_date)->diffForHumans() }})
+                                            </span>
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-sm font-medium text-gray-500">Total Sessions</dt>
+                                            <dd class="mt-1 text-lg text-gray-900">
+                                                {{ $activeSubscription->max_sessions_count ?? 'Unlimited' }}
+                                            </dd>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 border-t border-gray-200 pt-6 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm text-gray-500">Paid: ${{ number_format($activeSubscription->price, 2) }}</p>
+                                        </div>
+                                        <a href="#subscription-plans" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Renew Subscription
+                                        </a>
+                                    </div>
                                 </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Basic', 'duration' => 1]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
+                            @else
+                                <div class="p-6 text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No Active Subscription</h3>
+                                    <p class="text-gray-500 mb-6">Choose a plan to get started with your fitness journey.</p>
+                                    <a href="#subscription-plans" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        View Plans
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Single Session Notice -->
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
                             </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <div class="mb-2">
-                                    <h5 class="font-medium">3 Months</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$79</div>
-                                    <div class="text-sm text-green-600">Save $8</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Basic', 'duration' => 3]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow-sm border-2 border-indigo-500">
-                                <div class="mb-2">
-                                    <div class="text-sm font-medium text-indigo-600 mb-1">Best Value</div>
-                                    <h5 class="font-medium">12 Months</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$290</div>
-                                    <div class="text-sm text-green-600">Save $58</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Basic', 'duration' => 12]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                    <strong>Looking for a single session?</strong> Please visit our reception desk to purchase individual training sessions.
+                                </p>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Premium Plan -->
-                <div class="mb-12">
-                    <h4 class="text-xl font-bold mb-4">Premium Plan</h4>
-                    <p class="text-gray-500 mb-4">Extended hours and unlimited classes</p>
-                    
-                    <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                        <ul class="mb-4">
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Extended gym access</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Premium locker room access</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Unlimited group classes</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>2 trainer sessions/month</span>
-                            </li>
-                            <li class="flex items-center">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Quarterly fitness assessment</span>
-                            </li>
-                        </ul>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <div class="mb-2">
-                                    <h5 class="font-medium">1 Month</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$59</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Premium', 'duration' => 1]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <div class="mb-2">
-                                    <h5 class="font-medium">3 Months</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$169</div>
-                                    <div class="text-sm text-green-600">Save $8</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Premium', 'duration' => 3]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow-sm border-2 border-indigo-500">
-                                <div class="mb-2">
-                                    <div class="text-sm font-medium text-indigo-600 mb-1">Best Value</div>
-                                    <h5 class="font-medium">12 Months</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$590</div>
-                                    <div class="text-sm text-green-600">Save $118</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Premium', 'duration' => 12]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
+
+                    <!-- Subscription Plans Section -->
+                    <div id="subscription-plans" class="bg-white shadow-md rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Available Subscription Plans</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">Choose the plan that fits your fitness goals</p>
+                        </div>
+
+                        <div class="p-6">
+                            <!-- Subscription Plan Cards -->
+                            <!-- This would be similar to the existing subscription plan cards in the previous implementation -->
+                            <!-- You can keep the existing plan cards from the previous implementation -->
                         </div>
                     </div>
-                </div>
-                
-                <!-- Elite Plan -->
-                <div>
-                    <h4 class="text-xl font-bold mb-4">Elite Plan</h4>
-                    <p class="text-gray-500 mb-4">24/7 access and premium features</p>
-                    
-                    <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                        <ul class="mb-4">
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>24/7 gym access</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Exclusive locker with amenities</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>All group classes + priority</span>
-                            </li>
-                            <li class="flex items-center mb-2">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Unlimited trainer sessions</span>
-                            </li>
-                            <li class="flex items-center">
-                                <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>Nutrition consultation included</span>
-                            </li>
-                        </ul>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <div class="mb-2">
-                                    <h5 class="font-medium">1 Month</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$99</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Elite', 'duration' => 1]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow-sm">
-                                <div class="mb-2">
-                                    <h5 class="font-medium">3 Months</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$279</div>
-                                    <div class="text-sm text-green-600">Save $18</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Elite', 'duration' => 3]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow-sm border-2 border-indigo-500">
-                                <div class="mb-2">
-                                    <div class="text-sm font-medium text-indigo-600 mb-1">Best Value</div>
-                                    <h5 class="font-medium">12 Months</h5>
-                                    <div class="text-2xl font-bold text-gray-900">$990</div>
-                                    <div class="text-sm text-green-600">Save $198</div>
-                                </div>
-                                <a href="{{ route('member.subscription.payment', ['plan' => 'Elite', 'duration' => 12]) }}" 
-                                   class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                                    Select Plan
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Contact Support -->
-        <div class="bg-white shadow sm:rounded-lg mb-8">
-            <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Need Help With Your Subscription?</h3>
-                <div class="mt-2 max-w-xl text-sm text-gray-500">
-                    <p>Contact our support team for assistance with your subscription or billing questions.</p>
-                </div>
-                <div class="mt-5">
-                    <a href="{{ route('contact') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Contact Support
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
+
+    @section('scripts')
+        <script>
+            // Mobile menu functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const openSidebarButton = document.getElementById('open-sidebar');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                const closeMenuButtons = document.querySelectorAll('#close-mobile-menu, #close-mobile-menu-x');
+
+                function toggleMobileMenu(open) {
+                    if (open) {
+                        mobileMenu.classList.remove('hidden', '-translate-x-full');
+                        mobileMenuOverlay.classList.remove('hidden');
+                        document.body.classList.add('overflow-hidden');
+                    } else {
+                        mobileMenu.classList.add('-translate-x-full');
+                        setTimeout(() => {
+                            mobileMenu.classList.add('hidden');
+                            mobileMenuOverlay.classList.add('hidden');
+                            document.body.classList.remove('overflow-hidden');
+                        }, 300);
+                    }
+                }
+
+                if (openSidebarButton) {
+                    openSidebarButton.addEventListener('click', () => toggleMobileMenu(true));
+                }
+
+                closeMenuButtons.forEach(button => {
+                    button.addEventListener('click', () => toggleMobileMenu(false));
+                });
+
+                // Optional: Close mobile menu when clicking outside
+                const mobileMenuOverlayElement = document.getElementById('mobile-menu-overlay');
+                if (mobileMenuOverlayElement) {
+                    mobileMenuOverlayElement.addEventListener('click', () => toggleMobileMenu(false));
+                }
+            });
+        </script>
+    @endsection

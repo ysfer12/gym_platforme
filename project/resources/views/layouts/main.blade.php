@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'FitTrack Gym') }}</title>
+    <title>{{ config('app.name', 'City Club Gym') }}</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -93,7 +93,7 @@
                     <div class="flex-shrink-0 flex items-center">
                         <a href="{{ route('home') }}" class="flex items-center">
                             <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500">
-                                FitTrack
+                                CityClub
                             </span>
                             <span class="ml-1 text-xl font-semibold text-gray-800">Gym</span>
                         </a>
@@ -291,7 +291,7 @@
                 <div class="col-span-1 md:col-span-1">
                     <div class="flex items-center">
                         <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-300">
-                            FitTrack
+                            CityClub
                         </span>
                         <span class="ml-1 text-xl font-semibold text-gray-300">Gym</span>
                     </div>
