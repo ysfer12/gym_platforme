@@ -17,7 +17,7 @@ class CreateSubscriptionsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('type'); // Basic, Premium, Elite
-            $table->integer('duration'); // Duration in months (1, 3, 12)
+            $table->integer('duration')->nullable();
             $table->decimal('price', 10, 2);
             $table->date('start_date');
             $table->date('end_date');

@@ -47,6 +47,7 @@ class SubscriptionController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'type' => 'required|string|max:255',
+            'duration' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
@@ -100,6 +101,7 @@ class SubscriptionController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'type' => 'required|string|max:255',
+            'duration' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
@@ -361,6 +363,7 @@ public function purchaseSubscription(Request $request)
                 $subscription = new Subscription();
                 $subscription->user_id = $user->id;
                 $subscription->type = $plan;
+                $subscription->duration = $duration;	
                 $subscription->price = $price;
                 $subscription->start_date = $startDate;
                 $subscription->end_date = $endDate;

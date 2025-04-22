@@ -5,10 +5,32 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\PaymentController;
+
+// Admin Controllers
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
+use App\Http\Controllers\Admin\SessionController as AdminSessionController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\Admin\ReportController;
+
+// Trainer Controllers
+use App\Http\Controllers\Trainer\TrainerController;
+use App\Http\Controllers\Trainer\SessionController ;
+use App\Http\Controllers\Trainer\AttendanceController;
+use App\Http\Controllers\Trainer\ScheduleController;
+
+// Receptionist Controllers
+use App\Http\Controllers\Receptionist\ReceptionistController;
+use App\Http\Controllers\Receptionist\SubscriptionController as ReceptionistSubscriptionController;
+use App\Http\Controllers\Receptionist\AttendanceController as ReceptionistAttendanceController;
+use App\Http\Controllers\Receptionist\PaymentController as ReceptionistPaymentController;
+use App\Http\Controllers\Receptionist\SessionController as ReceptionistSessionController;
+
+// Member Controllers
+use App\Http\Controllers\Member\MemberController;
+use App\Http\Controllers\Member\SubscriptionController as MemberSubscriptionController;
 
 // Public Routes
 Route::get('/', function () {
@@ -80,53 +102,49 @@ Route::middleware('auth')->group(function () {
     
     // Member Routes
     Route::middleware(['role:Member'])->prefix('member')->group(function () {
+        // View dashboard
+        Route::get('/dashboard', [MemberController::class, 'dashboard'])
+            ->name('member.dashboard');
+        
         // Session booking for members
-        Route::post('/sessions/{session}/book', [SessionController::class, 'book'])
+        Route::get('/sessions', [MemberController::class, 'sessions'])
+            ->name('member.sessions');
+            
+        Route::post('/sessions/{session}/book', [MemberController::class, 'bookSession'])
             ->name('member.sessions.book');
         
-        // View own subscriptions
-        Route::get('/my-subscription', [SubscriptionController::class, 'mySubscription'])
+        // View subscription details
+        Route::get('/subscription', [MemberSubscriptionController::class, 'subscription'])
             ->name('member.subscription');
-        
-        // View own attendance
-        Route::get('/my-attendance', [AttendanceController::class, 'myAttendance'])
+            
+        // View attendance history
+        Route::get('/attendance', [MemberController::class, 'attendance'])
             ->name('member.attendance');
-
-            // View available sessions and book
-    Route::get('/sessions', [SessionController::class, 'memberSessions'])
-    ->name('member.sessions.book');
-
-// Book a session
-Route::post('/sessions/{session}/book', [SessionController::class, 'book'])
-    ->name('member.sessions.book-post');
-
-// View subscription details
-Route::get('/subscription', [SubscriptionController::class, 'memberSubscription'])
-    ->name('member.subscription');
-
-// View attendance history
-Route::get('/attendance', [AttendanceController::class, 'memberAttendance'])
-    ->name('member.attendance');
-   // Add a route to show the payment page
-Route::get('/member/subscription/payment/{plan}/{duration}', [SubscriptionController::class, 'showPaymentPage'])
-->name('member.subscription.payment');
-
-// Keep the existing route for the final purchase
-Route::post('/member/subscription/purchase', [SubscriptionController::class, 'purchaseSubscription'])
-->name('member.subscription.purchase');
-// Stripe Checkout Routes
-Route::post('/member/subscription/checkout-session', [SubscriptionController::class, 'createCheckoutSession'])
-    ->name('member.subscription.checkout-session');
-    
-Route::get('/member/subscription/success', [SubscriptionController::class, 'handleCheckoutSuccess'])
-    ->name('member.subscription.success');
-// Route pour rediriger vers Stripe
-Route::post('/member/subscription/stripe-redirect', [SubscriptionController::class, 'stripeRedirect'])
-    ->name('member.subscription.stripe-redirect');
+            
+        // Subscription management routes
+        Route::get('/subscription/payment/{plan}/{duration}', [MemberSubscriptionController::class, 'showPaymentPage'])
+            ->name('member.subscription.payment');
+            
+        Route::post('/subscription/purchase', [MemberSubscriptionController::class, 'purchaseSubscription'])
+            ->name('member.subscription.purchase');
+            
+        Route::post('/subscription/checkout-session', [MemberSubscriptionController::class, 'createCheckoutSession'])
+            ->name('member.subscription.checkout-session');
+            
+        Route::get('/subscription/success', [MemberSubscriptionController::class, 'handleCheckoutSuccess'])
+            ->name('member.subscription.success');
+            
+        Route::post('/subscription/stripe-redirect', [MemberSubscriptionController::class, 'stripeRedirect'])
+            ->name('member.subscription.stripe-redirect');
     });
     
     // Trainer Routes
     Route::middleware(['role:Trainer'])->prefix('trainer')->group(function () {
+        // View dashboard
+        Route::get('/dashboard', [TrainerController::class, 'dashboard'])
+            ->name('trainer.dashboard');
+            
+
         // Session management
         Route::resource('sessions', SessionController::class)
             ->names([
@@ -140,24 +158,51 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
             ]);
         
         // Attendance management for trainer's sessions
-        Route::get('/sessions/{session}/attendances', [AttendanceController::class, 'sessionAttendances'])
+        Route::get('/sessions/{session}/attendances', [TrainerController::class, 'sessionAttendances'])
             ->name('trainer.sessions.attendances');
+
+        
         
         // Record attendance
         Route::post('/attendances/record-entry', [AttendanceController::class, 'recordEntry'])
             ->name('trainer.attendances.record-entry');
         Route::post('/attendances/{attendance}/record-exit', [AttendanceController::class, 'recordExit'])
             ->name('trainer.attendances.record-exit');
+            
+        // Schedule management
+        Route::resource('schedule', ScheduleController::class)
+            ->names([
+                'index' => 'trainer.schedule.index',
+                'create' => 'trainer.schedule.create',
+                'store' => 'trainer.schedule.store',
+                'edit' => 'trainer.schedule.edit',
+                'update' => 'trainer.schedule.update',
+                'destroy' => 'trainer.schedule.destroy',
+            ]);
+        
+        // Members in trainer's sessions
+        Route::get('/members', [TrainerController::class, 'members'])
+            ->name('trainer.members');
+        Route::get('/members/{id}', [TrainerController::class, 'memberDetails'])
+            ->name('trainer.members.show');
     });
     
     // Receptionist Routes
     Route::middleware(['role:Receptionist'])->prefix('receptionist')->group(function () {
+        // View dashboard
+        Route::get('/dashboard', [ReceptionistController::class, 'dashboard'])
+            ->name('receptionist.dashboard');
+            
         // Member management
-        Route::get('/members', [DashboardController::class, 'members'])
+        Route::get('/members', [ReceptionistController::class, 'members'])
             ->name('receptionist.members');
+            
+        // Member details
+        Route::get('/members/{id}', [ReceptionistController::class, 'memberDetails'])
+            ->name('receptionist.members.show');
         
         // Subscription management
-        Route::resource('subscriptions', SubscriptionController::class)
+        Route::resource('subscriptions', ReceptionistSubscriptionController::class)
             ->names([
                 'index' => 'receptionist.subscriptions.index',
                 'create' => 'receptionist.subscriptions.create',
@@ -169,19 +214,25 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
             ]);
         
         // Subscription management actions
-        Route::post('/subscriptions/{subscription}/renew', [SubscriptionController::class, 'renew'])
+        Route::post('/subscriptions/{subscription}/renew', [ReceptionistSubscriptionController::class, 'renew'])
             ->name('receptionist.subscriptions.renew');
-        Route::post('/subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel'])
+        Route::post('/subscriptions/{subscription}/cancel', [ReceptionistSubscriptionController::class, 'cancel'])
             ->name('receptionist.subscriptions.cancel');
         
-        // Session booking for members
-        Route::get('/sessions', [SessionController::class, 'index'])
+        // Session management
+        Route::get('/sessions', [ReceptionistSessionController::class, 'index'])
             ->name('receptionist.sessions.index');
-        Route::post('/sessions/{session}/book-for-member', [SessionController::class, 'bookForMember'])
+        Route::get('/sessions/{id}', [ReceptionistSessionController::class, 'show'])
+            ->name('receptionist.sessions.show');
+        Route::post('/sessions/{id}/record-attendance', [ReceptionistSessionController::class, 'recordAttendance'])
+            ->name('receptionist.sessions.record-attendance');
+        Route::delete('/sessions/{id}/remove-member', [ReceptionistSessionController::class, 'removeMember'])
+            ->name('receptionist.sessions.remove-member');
+        Route::post('/sessions/{session}/book-for-member', [ReceptionistController::class, 'bookForMember'])
             ->name('receptionist.sessions.book-for-member');
         
         // Attendance management
-        Route::resource('attendances', AttendanceController::class)
+        Route::resource('attendances', ReceptionistAttendanceController::class)
             ->names([
                 'index' => 'receptionist.attendances.index',
                 'create' => 'receptionist.attendances.create',
@@ -193,7 +244,7 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
             ]);
         
         // Payment management
-        Route::resource('payments', PaymentController::class)
+        Route::resource('payments', ReceptionistPaymentController::class)
             ->names([
                 'index' => 'receptionist.payments.index',
                 'create' => 'receptionist.payments.create',
@@ -204,32 +255,60 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
                 'destroy' => 'receptionist.payments.destroy',
             ]);
         
-        Route::post('/payments/{payment}/process', [PaymentController::class, 'process'])
+        Route::post('/payments/{payment}/process', [ReceptionistPaymentController::class, 'process'])
             ->name('receptionist.payments.process');
-        Route::post('/payments/{payment}/refund', [PaymentController::class, 'refund'])
+        Route::post('/payments/{payment}/refund', [ReceptionistPaymentController::class, 'refund'])
             ->name('receptionist.payments.refund');
-        Route::get('/payments/{payment}/receipt', [PaymentController::class, 'generateReceipt'])
+        Route::get('/payments/{payment}/receipt', [ReceptionistPaymentController::class, 'generateReceipt'])
             ->name('receptionist.payments.receipt');
+            
+        // Trainers management
+        Route::get('/trainers', [ReceptionistController::class, 'trainers'])
+            ->name('receptionist.trainers');
+        Route::get('/trainers/{id}', [ReceptionistController::class, 'trainerDetails'])
+            ->name('receptionist.trainers.show');
     });
     
     // Admin Routes
     Route::middleware(['role:Administrator'])->prefix('admin')->group(function () {
+        // View dashboard
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])
+            ->name('admin.dashboard');
+            
         // User management
-        Route::get('/users', [DashboardController::class, 'users'])
+        Route::get('/users', [AdminUserController::class, 'index'])
             ->name('admin.users');
-        Route::get('/users/create', [DashboardController::class, 'createUser'])
+        Route::get('/users/create', [AdminUserController::class, 'create'])
             ->name('admin.users.create');
-        Route::post('/users', [DashboardController::class, 'storeUser'])
+        Route::post('/users', [AdminUserController::class, 'store'])
             ->name('admin.users.store');
-        Route::get('/users/{user}/edit', [DashboardController::class, 'editUser'])
+        Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])
             ->name('admin.users.edit');
-        Route::put('/users/{user}', [DashboardController::class, 'updateUser'])
+        Route::put('/users/{user}', [AdminUserController::class, 'update'])
             ->name('admin.users.update');
-        Route::delete('/users/{user}', [DashboardController::class, 'destroyUser'])
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])
             ->name('admin.users.destroy');
         
+        // Reports
+        Route::get('/reports', [ReportController::class, 'index'])
+            ->name('admin.reports.index');
+        Route::get('/reports/members', [ReportController::class, 'memberActivityReport'])
+            ->name('admin.reports.members');
+        Route::get('/reports/sessions', [ReportController::class, 'sessionReport'])
+            ->name('admin.reports.sessions');
+        Route::get('/reports/revenues', [ReportController::class, 'financialReport'])
+            ->name('admin.reports.revenues');
+        Route::get('/reports/custom', [ReportController::class, 'customReport'])
+            ->name('admin.reports.custom');
+        Route::get('/reports/export', [ReportController::class, 'exportReport'])
+            ->name('admin.reports.export');
+        Route::get('/reports/membership-trends', [ReportController::class, 'membershipTrendsReport'])
+            ->name('admin.reports.membership-trends');
+        Route::get('/reports/trainer-performance', [ReportController::class, 'trainerPerformanceReport'])
+            ->name('admin.reports.trainer-performance');
+            
         // Session management
-        Route::resource('sessions', SessionController::class)
+        Route::resource('sessions', AdminSessionController::class)
             ->names([
                 'index' => 'admin.sessions.index',
                 'create' => 'admin.sessions.create',
@@ -239,9 +318,17 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
                 'update' => 'admin.sessions.update',
                 'destroy' => 'admin.sessions.destroy',
             ]);
+            
+        // Session additional actions
+        Route::get('/sessions/{session}/attendance', [AdminSessionController::class, 'attendance'])
+            ->name('admin.sessions.attendance');
+        Route::post('/sessions/{session}/add-member', [AdminSessionController::class, 'addMember'])
+            ->name('admin.sessions.add-member');
+        Route::post('/sessions/{session}/cancel', [AdminSessionController::class, 'cancel'])
+            ->name('admin.sessions.cancel');
         
         // Subscription management
-        Route::resource('subscriptions', SubscriptionController::class)
+        Route::resource('subscriptions', AdminSubscriptionController::class)
             ->names([
                 'index' => 'admin.subscriptions.index',
                 'create' => 'admin.subscriptions.create',
@@ -251,9 +338,19 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
                 'update' => 'admin.subscriptions.update',
                 'destroy' => 'admin.subscriptions.destroy',
             ]);
+            
+        // Subscription additional actions
+        Route::post('/subscriptions/{subscription}/renew', [AdminSubscriptionController::class, 'renew'])
+            ->name('admin.subscriptions.renew');
+        Route::post('/subscriptions/{subscription}/cancel', [AdminSubscriptionController::class, 'cancel'])
+            ->name('admin.subscriptions.cancel');
+        Route::get('/subscriptions/report', [AdminSubscriptionController::class, 'report'])
+            ->name('admin.subscriptions.report');
+        Route::get('/subscriptions/export', [AdminSubscriptionController::class, 'export'])
+            ->name('admin.subscriptions.export');
         
         // Attendance management
-        Route::resource('attendances', AttendanceController::class)
+        Route::resource('attendances', AdminAttendanceController::class)
             ->names([
                 'index' => 'admin.attendances.index',
                 'create' => 'admin.attendances.create',
@@ -263,9 +360,19 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
                 'update' => 'admin.attendances.update',
                 'destroy' => 'admin.attendances.destroy',
             ]);
+            
+        // Attendance entry and exit routes
+        Route::post('/attendances/record-entry', [AdminAttendanceController::class, 'recordEntry'])
+            ->name('admin.attendances.record-entry');
+        Route::post('/attendances/{attendance}/record-exit', [AdminAttendanceController::class, 'recordExit'])
+            ->name('admin.attendances.record-exit');
+            
+        // Attendance report route
+        Route::get('/attendances/report', [AdminAttendanceController::class, 'report'])
+            ->name('admin.attendances.report');
         
         // Payment management
-        Route::resource('payments', PaymentController::class)
+        Route::resource('payments', AdminPaymentController::class)
             ->names([
                 'index' => 'admin.payments.index',
                 'create' => 'admin.payments.create',
@@ -275,13 +382,15 @@ Route::post('/member/subscription/stripe-redirect', [SubscriptionController::cla
                 'update' => 'admin.payments.update',
                 'destroy' => 'admin.payments.destroy',
             ]);
-        
-        // Reports
-        Route::get('/reports/members', [DashboardController::class, 'memberReport'])
-            ->name('admin.reports.members');
-        Route::get('/reports/sessions', [DashboardController::class, 'sessionReport'])
-            ->name('admin.reports.sessions');
-        Route::get('/reports/revenues', [DashboardController::class, 'revenueReport'])
-            ->name('admin.reports.revenues');
+            
+        // Payment additional actions
+        Route::post('/payments/{payment}/process', [AdminPaymentController::class, 'process'])
+            ->name('admin.payments.process');
+        Route::post('/payments/{payment}/refund', [AdminPaymentController::class, 'refund'])
+            ->name('admin.payments.refund');
+        Route::get('/payments/{payment}/receipt', [AdminPaymentController::class, 'generateReceipt'])
+            ->name('admin.payments.receipt');
+        Route::get('/payments/report', [AdminPaymentController::class, 'report'])
+            ->name('admin.payments.report');
     });
 });

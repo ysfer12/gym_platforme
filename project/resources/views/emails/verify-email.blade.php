@@ -1,16 +1,28 @@
 @component('mail::message')
-# Verify Email Address
+# Welcome to {{ config('app.name') }}!
 
-Hello {{ $user->firstname }} {{ $user->lastname }},
+Dear {{ $user->firstname }} {{ $user->lastname }},
 
-Please click the button below to verify your email address and activate your gym membership account.
+We're excited to have you join our fitness community! Please verify your email to unlock all features of your membership.
 
 @component('mail::button', ['url' => $url])
-Verify Email Address
+Activate My Account
 @endcomponent
 
-If you did not create an account, no further action is required.
+@component('mail::panel')
+## What's Next?
+- Access your personal dashboard
+- Book fitness classes
+- Track your workout progress
+- Connect with fitness trainers
+@endcomponent
 
-Regards,<br>
-{{ config('app.name') }} Team
+If you didn't create this account, please ignore this email.
+
+Stay strong, stay healthy!
+
+Best regards,<br>
+The {{ config('app.name') }} Team
+
+<small>© {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</small>
 @endcomponent

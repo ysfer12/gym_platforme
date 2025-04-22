@@ -170,7 +170,7 @@ public function book(Session $session)
  * @return \Illuminate\Http\Response
  */
 public function memberSessions()
- {
+{
     $upcomingSessions = Session::where('date', '>=', Carbon::today())
         ->orderBy('date')
         ->orderBy('start_time')
@@ -183,6 +183,7 @@ public function memberSessions()
         ->toArray();
         
     return view('member.sessions', compact('upcomingSessions', 'bookedSessionIds'));
- }
+}
+
 
 }

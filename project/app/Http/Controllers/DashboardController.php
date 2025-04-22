@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Session;
-use App\Models\Subscription;
-use App\Models\Attendance;
-use Carbon\Carbon;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Trainer\TrainerController;
+use App\Http\Controllers\Receptionist\ReceptionistController;
+use App\Http\Controllers\Member\MemberController;
 
 class DashboardController extends Controller
 {
@@ -32,98 +32,118 @@ class DashboardController extends Controller
 
         // Redirect to the appropriate dashboard based on user role
         if ($user->isAdmin()) {
-            return $this->adminDashboard();
+            return app(AdminController::class)->dashboard();
         } elseif ($user->isTrainer()) {
-            return $this->trainerDashboard();
+            return app(TrainerController::class)->dashboard();
         } elseif ($user->isReceptionist()) {
-            return $this->receptionistDashboard();
+            return app(ReceptionistController::class)->dashboard();
         } else {
-            return $this->memberDashboard();
+            return app(MemberController::class)->dashboard();
         }
     }
 
     /**
-     * Show the admin dashboard.
+     * Redirect to user management (admin only)
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
-    private function adminDashboard()
+    public function users()
     {
-        // Add any admin-specific data to pass to the view
-        return view('dashboards.admin');
+        return app(Admin\UserController::class)->index();
     }
 
     /**
-     * Show the trainer dashboard.
+     * Redirect to create user form (admin only)
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
-    private function trainerDashboard()
+    public function createUser()
     {
-        // Add any trainer-specific data to pass to the view
-        return view('dashboards.trainer');
+        return app(Admin\UserController::class)->create();
     }
 
     /**
-     * Show the receptionist dashboard.
+     * Redirect to store user logic (admin only)
      *
-     * @return \Illuminate\View\View
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    private function receptionistDashboard()
+    public function storeUser(Request $request)
     {
-        // Add any receptionist-specific data to pass to the view
-        return view('dashboards.receptionist');
+        return app(Admin\UserController::class)->store($request);
     }
 
     /**
-     * Show the member dashboard.
+     * Redirect to edit user form (admin only)
      *
-     * @return \Illuminate\View\View
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
      */
-    private function memberDashboard()
+    public function editUser($user)
     {
-        $user = Auth::user();
-        
-        // Get active subscription
-        $activeSubscription = Subscription::where('user_id', $user->id)
-            ->where('end_date', '>=', Carbon::today())
-            ->where('status', 'active')
-            ->first();
-            
-        // Get upcoming booked sessions
-        $upcomingSessions = Session::whereHas('attendances', function($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->where('date', '>=', Carbon::today())
-            ->orderBy('date')
-            ->orderBy('start_time')
-            ->take(5)
-            ->get();
-            
-        // Get recent activity (attendances)
-        $recentAttendances = Attendance::where('user_id', $user->id)
-            ->with('session')
-            ->orderBy('date', 'desc')
-            ->take(5)
-            ->get();
-            
-        // Get popular classes (most attended sessions)
-        $popularSessions = Session::withCount('attendances')
-            ->orderBy('attendances_count', 'desc')
-            ->take(3)
-            ->get();
-            
-        // Get this month's activity count
-        $monthlyActivity = Attendance::where('user_id', $user->id)
-            ->whereMonth('date', Carbon::now()->month)
-            ->count();
-        
-        return view('dashboards.member', compact(
-            'activeSubscription',
-            'upcomingSessions',
-            'recentAttendances',
-            'popularSessions',
-            'monthlyActivity'
-        ));
+        return app(Admin\UserController::class)->edit($user);
+    }
+
+    /**
+     * Redirect to update user logic (admin only)
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function updateUser(Request $request, $user)
+    {
+        return app(Admin\UserController::class)->update($request, $user);
+    }
+
+    /**
+     * Redirect to destroy user logic (admin only)
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyUser($user)
+    {
+        return app(Admin\UserController::class)->destroy($user);
+    }
+
+    /**
+     * Redirect to member report (admin only)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function memberReport()
+    {
+        return app(Admin\AdminController::class)->memberReport();
+    }
+
+    /**
+     * Redirect to session report (admin only)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sessionReport()
+    {
+        return app(Admin\AdminController::class)->sessionReport();
+    }
+
+    /**
+     * Redirect to revenue report (admin only)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function revenueReport()
+    {
+        return app(Admin\AdminController::class)->revenueReport();
+    }
+
+    /**
+     * Redirect to members listing (receptionist only)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function members()
+    {
+        return app(Receptionist\ReceptionistController::class)->members();
     }
 }

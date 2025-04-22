@@ -17,7 +17,7 @@
                             My Subscription
                         </h1>
                         <nav class="flex items-center space-x-2">
-                            <a href="{{ route('member.sessions.book') }}" class="text-sm text-indigo-600 hover:text-indigo-800 transition-colors">
+                            <a href="{{ route('member.sessions') }}" class="text-sm text-indigo-600 hover:text-indigo-800 transition-colors">
                                 Book a Session
                             </a>
                         </nav>
@@ -138,8 +138,171 @@
 
                         <div class="p-6">
                             <!-- Subscription Plan Cards -->
-                            <!-- This would be similar to the existing subscription plan cards in the previous implementation -->
-                            <!-- You can keep the existing plan cards from the previous implementation -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Basic Plan -->
+                                <div class="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300">
+                                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
+                                        <h3 class="text-xl font-bold text-white">Basic Plan</h3>
+                                        <p class="text-blue-100">Essential fitness access</p>
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="flex items-baseline mb-6">
+                                            <span class="text-3xl font-bold text-gray-900">$29</span>
+                                            <span class="text-lg text-gray-500 ml-1">/month</span>
+                                        </div>
+                                        
+                                        <ul class="space-y-3 mb-6">
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">4 sessions per month</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">Access to gym facilities</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">Basic classes</span>
+                                            </li>
+                                            <li class="flex items-center text-gray-400">
+                                                <svg class="h-5 w-5 text-gray-300 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span>Trainer zone access</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <div class="space-y-2">
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Basic', 'duration' => 1]) }}" class="w-full block text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Monthly
+                                            </a>
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Basic', 'duration' => 3]) }}" class="w-full block text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                3 Months (10% off)
+                                            </a>
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Basic', 'duration' => 12]) }}" class="w-full block text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                12 Months (20% off)
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Premium Plan -->
+                                <div class="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 transform scale-105 z-10">
+                                    <div class="relative">
+                                        <div class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-3 py-1 transform translate-x-2 -translate-y-2 rotate-12">
+                                            Popular
+                                        </div>
+                                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+                                            <h3 class="text-xl font-bold text-white">Premium Plan</h3>
+                                            <p class="text-indigo-100">Advanced fitness experience</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="flex items-baseline mb-6">
+                                            <span class="text-3xl font-bold text-gray-900">$59</span>
+                                            <span class="text-lg text-gray-500 ml-1">/month</span>
+                                        </div>
+                                        
+                                        <ul class="space-y-3 mb-6">
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">8 sessions per month</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">All gym facilities</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">All class levels</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">Trainer zone access</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <div class="space-y-2">
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Premium', 'duration' => 1]) }}" class="w-full block text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Monthly
+                                            </a>
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Premium', 'duration' => 3]) }}" class="w-full block text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                3 Months (10% off)
+                                            </a>
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Premium', 'duration' => 12]) }}" class="w-full block text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                12 Months (20% off)
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Elite Plan -->
+                                <div class="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300">
+                                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+                                        <h3 class="text-xl font-bold text-white">Elite Plan</h3>
+                                        <p class="text-purple-100">Premium fitness experience</p>
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="flex items-baseline mb-6">
+                                            <span class="text-3xl font-bold text-gray-900">$99</span>
+                                            <span class="text-lg text-gray-500 ml-1">/month</span>
+                                        </div>
+                                        
+                                        <ul class="space-y-3 mb-6">
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">Unlimited sessions</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">All gym facilities 24/7</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">All classes + VIP sessions</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                <span class="text-gray-700">Personal trainer consult</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <div class="space-y-2">
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Elite', 'duration' => 1]) }}" class="w-full block text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Monthly
+                                            </a>
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Elite', 'duration' => 3]) }}" class="w-full block text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                3 Months (10% off)
+                                            </a>
+                                            <a href="{{ route('member.subscription.payment', ['plan' => 'Elite', 'duration' => 12]) }}" class="w-full block text-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                12 Months (20% off)
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,3 +350,4 @@
             });
         </script>
     @endsection
+@endsection

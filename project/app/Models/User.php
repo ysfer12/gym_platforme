@@ -124,6 +124,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     
     /**
+     * Get the availabilities for the trainer
+     */
+    public function availabilities()
+    {
+        return $this->hasMany(TrainerAvailability::class, 'trainer_id');
+    }
+    
+    /**
      * Send the email verification notification.
      *
      * @return void
