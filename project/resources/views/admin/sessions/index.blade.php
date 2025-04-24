@@ -233,7 +233,13 @@
                                                 <a href="{{ route('admin.sessions.attendance', $session) }}" class="text-blue-600 hover:text-blue-900">
                                                     Attendance
                                                 </a>
-                                                @if(\Carbon\Carbon::parse($session->date . ' ' . $session->start_time) > now())
+                                                @php
+                                                    // Fix the date comparison using Carbon
+                                                    $sessionDateTime = \Carbon\Carbon::parse($session->date);
+                                                    $sessionDateTime->setTimeFromTimeString($session->start_time);
+                                                    $isFutureSession = $sessionDateTime->greaterThan(now());
+                                                @endphp
+                                                @if($isFutureSession)
                                                     <form action="{{ route('admin.sessions.cancel', $session) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to cancel this session?');">
                                                         @csrf
                                                         <button type="submit" class="text-red-600 hover:text-red-900">
@@ -267,13 +273,15 @@
         @include('partials.admin-mobile-menu')
     </div>
 </div>
-
 @endsection
 
 @push('scripts')
 <script>
     // Define session data for the calendar
     const sessions = @json($sessions->items());
+    
+    // Debug: Log sessions for troubleshooting
+    console.log('Available sessions:', sessions);
     
     document.addEventListener('DOMContentLoaded', function() {
         let currentDate = new Date();
@@ -321,6 +329,8 @@
             date.setDate(date.getDate() + i);
             
             const dateString = date.toISOString().split('T')[0];
+            console.log(`Looking for sessions on: ${dateString}`);
+            
             const cell = document.createElement('div');
             cell.className = 'bg-white border border-gray-200 p-2 min-h-[150px]';
             
@@ -338,8 +348,19 @@
             
             // Filter sessions for this date
             const todaysSessions = sessions.filter(session => {
-                return session.date === dateString;
+                // Handle possible date format differences by formatting the date consistently
+                const sessionDate = new Date(session.date);
+                const formattedSessionDate = sessionDate.toISOString().split('T')[0];
+                const matches = formattedSessionDate === dateString;
+                
+                if (matches) {
+                    console.log(`Found session "${session.title}" on ${formattedSessionDate}`);
+                }
+                
+                return matches;
             });
+            
+            console.log(`${todaysSessions.length} sessions found for ${dateString}`);
             
             // Add sessions to the cell
             todaysSessions.forEach(session => {
@@ -361,9 +382,21 @@
                 }
                 sessionElement.className += ` ${bgColor}`;
                 
-                // Format time
-                const startTime = new Date(`2000-01-01T${session.start_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const endTime = new Date(`2000-01-01T${session.end_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                // Format time - handle potential formatting issues
+                let startTime, endTime;
+                try {
+                    startTime = new Date(`2000-01-01T${session.start_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } catch (e) {
+                    console.error(`Error formatting start time: ${session.start_time}`, e);
+                    startTime = session.start_time;
+                }
+                
+                try {
+                    endTime = new Date(`2000-01-01T${session.end_time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } catch (e) {
+                    console.error(`Error formatting end time: ${session.end_time}`, e);
+                    endTime = session.end_time;
+                }
                 
                 sessionElement.innerHTML = `
                     <div class="font-bold">${session.title}</div>
@@ -396,4 +429,4 @@
         document.getElementById('currentWeek').textContent = displayText;
     }
 </script>
-@endpush 
+@endpush

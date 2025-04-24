@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -25,17 +26,44 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $payments = Payment::with('subscription.user')
-            ->orderBy('date', 'desc')
+        // Apply filters if provided
+        $query = Payment::with('subscription.user');
+        
+        if ($request->has('status') && $request->status !== '') {
+            $query->where('status', $request->status);
+        }
+        
+        // Get paginated payments
+        $payments = $query->orderBy('date', 'desc')
             ->paginate(15);
         
         // Calculate totals for display
         $totalRevenue = Payment::where('status', 'paid')->sum('amount');
         $pendingRevenue = Payment::where('status', 'pending')->sum('amount');
-            
-        return view('admin.payments.index', compact('payments', 'totalRevenue', 'pendingRevenue'));
+        
+        // Get chart data for monthly revenue (last 12 months)
+        $monthlyRevenue = $this->getMonthlyRevenue();
+        
+        // Get payment methods distribution
+        $paymentMethods = $this->getPaymentMethodsDistribution();
+        
+        // Get payment status distribution
+        $paymentStatuses = $this->getPaymentStatusDistribution();
+        
+        // Get weekly payment trends (last 4 weeks)
+        $weeklyTrends = $this->getWeeklyTrends();
+        
+        return view('admin.payments.index', compact(
+            'payments', 
+            'totalRevenue', 
+            'pendingRevenue',
+            'monthlyRevenue',
+            'paymentMethods',
+            'paymentStatuses',
+            'weeklyTrends'
+        ));
     }
 
     /**
@@ -168,19 +196,6 @@ class PaymentController extends Controller
         return redirect()->route('admin.payments.show', $payment)
             ->with('success', 'Payment refunded successfully.');
     }
-
-    /**
-     * Generate a receipt for a payment.
-     *
-     * @param  \App\Models\Payment  $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function generateReceipt(Payment $payment)
-    {
-        $payment->load('subscription.user');
-        
-        return view('admin.payments.receipt', compact('payment'));
-    }
     
     /**
      * Generate payment report.
@@ -230,5 +245,133 @@ class PaymentController extends Controller
             'paymentsByMethod',
             'paymentsByDay'
         ));
+    }
+    
+    /**
+     * Get monthly revenue data for the last 12 months.
+     *
+     * @return array
+     */
+    private function getMonthlyRevenue()
+    {
+        $result = [
+            'labels' => [],
+            'data' => []
+        ];
+        
+        // Get the last 12 months
+        $months = [];
+        $data = [];
+        
+        for ($i = 11; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $months[] = $month->format('M');
+            
+            $amount = Payment::where('status', 'paid')
+                ->whereYear('date', $month->year)
+                ->whereMonth('date', $month->month)
+                ->sum('amount');
+                
+            $data[] = $amount;
+        }
+        
+        $result['labels'] = $months;
+        $result['data'] = $data;
+        
+        return $result;
+    }
+    
+    /**
+     * Get payment methods distribution.
+     *
+     * @return array
+     */
+    private function getPaymentMethodsDistribution()
+    {
+        $methods = Payment::select('method', DB::raw('COUNT(*) as count'))
+            ->groupBy('method')
+            ->get();
+            
+        $result = [
+            'labels' => [],
+            'data' => [],
+            'backgroundColor' => [
+                'rgba(99, 102, 241, 0.6)',   // Indigo
+                'rgba(52, 211, 153, 0.6)',   // Green
+                'rgba(251, 146, 60, 0.6)',   // Orange
+                'rgba(79, 70, 229, 0.6)',    // Purple
+                'rgba(156, 163, 175, 0.6)'   // Gray
+            ]
+        ];
+        
+        foreach ($methods as $method) {
+            $result['labels'][] = ucfirst($method->method);
+            $result['data'][] = $method->count;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Get payment status distribution.
+     *
+     * @return array
+     */
+    private function getPaymentStatusDistribution()
+    {
+        $statuses = Payment::select('status', DB::raw('COUNT(*) as count'))
+            ->groupBy('status')
+            ->get();
+            
+        $result = [
+            'labels' => [],
+            'data' => [],
+            'backgroundColor' => [
+                'rgba(52, 211, 153, 0.6)',   // Green for paid
+                'rgba(251, 146, 60, 0.6)',   // Orange for pending
+                'rgba(239, 68, 68, 0.6)'     // Red for refunded
+            ]
+        ];
+        
+        foreach ($statuses as $status) {
+            $result['labels'][] = ucfirst($status->status);
+            $result['data'][] = $status->count;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Get weekly payment trends for the last 4 weeks.
+     *
+     * @return array
+     */
+    private function getWeeklyTrends()
+    {
+        $result = [
+            'labels' => [],
+            'transactions' => [],
+            'revenue' => []
+        ];
+        
+        // Get the last 4 weeks
+        for ($i = 3; $i >= 0; $i--) {
+            $startDate = Carbon::now()->subWeeks($i)->startOfWeek();
+            $endDate = Carbon::now()->subWeeks($i)->endOfWeek();
+            
+            $result['labels'][] = 'Week ' . (4 - $i);
+            
+            // Get transaction count
+            $transactions = Payment::whereBetween('date', [$startDate, $endDate])->count();
+            $result['transactions'][] = $transactions;
+            
+            // Get revenue
+            $revenue = Payment::where('status', 'paid')
+                ->whereBetween('date', [$startDate, $endDate])
+                ->sum('amount');
+            $result['revenue'][] = $revenue;
+        }
+        
+        return $result;
     }
 }

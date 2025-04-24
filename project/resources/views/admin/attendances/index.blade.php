@@ -219,18 +219,28 @@
                                             {{ $attendance->exit_time ? \Carbon\Carbon::parse($attendance->exit_time)->format('g:i A') : 'Not recorded' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            @if($attendance->entry_time && $attendance->exit_time)
-                                                @php
-                                                    $entry = \Carbon\Carbon::parse($attendance->date . ' ' . $attendance->entry_time);
-                                                    $exit = \Carbon\Carbon::parse($attendance->date . ' ' . $attendance->exit_time);
-                                                    $duration = $entry->diffInMinutes($exit);
-                                                    $hours = floor($duration / 60);
-                                                    $minutes = $duration % 60;
-                                                @endphp
-                                                {{ $hours > 0 ? $hours . 'h ' : '' }}{{ $minutes }}m
-                                            @else
-                                                -
-                                            @endif
+                                        @if($attendance->entry_time && $attendance->exit_time)
+    @php
+        // Create date object from attendance date
+        $dateObj = \Carbon\Carbon::parse($attendance->date);
+        
+        // Parse entry time and set it on the same date
+        $entry = \Carbon\Carbon::parse($attendance->entry_time);
+        $entry->setDateFrom($dateObj);
+        
+        // Parse exit time and set it on the same date
+        $exit = \Carbon\Carbon::parse($attendance->exit_time);
+        $exit->setDateFrom($dateObj);
+        
+        // Calculate duration
+        $duration = $entry->diffInMinutes($exit);
+        $hours = floor($duration / 60);
+        $minutes = $duration % 60;
+    @endphp
+    {{ $hours > 0 ? $hours . 'h ' : '' }}{{ $minutes }}m
+@else
+    -
+@endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex justify-end space-x-2">

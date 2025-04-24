@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SubscriptionConfirmation;
+use Illuminate\Support\Str;
 
 class SubscriptionController extends Controller
 {
@@ -25,14 +26,27 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Generate a unique transaction ID
+     * 
+     * @return string
+     */
+    private function generateTransactionId()
+    {
+        $prefix = 'TXN';
+        $date = now()->format('Ymd');
+        $random = strtoupper(Str::random(6));
+        return $prefix . $date . $random;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $subscriptions = Subscription::with('user')->get();
-        return view('receptionist.subscriptions.index', compact('subscriptions'));
+        $subscriptions = Subscription::with('user')->paginate(15);
+                return view('receptionist.subscriptions.index', compact('subscriptions'));
     }
 
     /**
@@ -63,11 +77,14 @@ class SubscriptionController extends Controller
             'end_date' => 'required|date|after:start_date',
             'status' => 'required|string|max:255',
             'payment_method' => 'nullable|string|max:255',
-            'transaction_number' => 'nullable|string|max:255',
             'max_sessions_count' => 'nullable|integer|min:0',
             'sessions_left' => 'nullable|integer|min:0',
             'trainer_zone_access' => 'boolean',
         ]);
+
+        // Generate a transaction number
+        $transactionId = $this->generateTransactionId();
+        $validated['transaction_number'] = $transactionId;
 
         $subscription = Subscription::create($validated);
 
@@ -79,6 +96,7 @@ class SubscriptionController extends Controller
                 'date' => now(),
                 'method' => $validated['payment_method'],
                 'status' => 'paid',
+                'transaction_id' => $transactionId, // Use the same transaction ID
             ]);
         }
 
@@ -128,11 +146,15 @@ class SubscriptionController extends Controller
             'end_date' => 'required|date|after:start_date',
             'status' => 'required|string|max:255',
             'payment_method' => 'nullable|string|max:255',
-            'transaction_number' => 'nullable|string|max:255',
             'max_sessions_count' => 'nullable|integer|min:0',
             'sessions_left' => 'nullable|integer|min:0',
             'trainer_zone_access' => 'boolean',
         ]);
+
+        // Don't update transaction_number if it already exists
+        if (empty($subscription->transaction_number)) {
+            $validated['transaction_number'] = $this->generateTransactionId();
+        }
 
         $subscription->update($validated);
 
@@ -174,12 +196,16 @@ class SubscriptionController extends Controller
             'payment_method' => $validated['payment_method'],
         ]);
 
+        // Generate new transaction ID for renewal
+        $transactionId = $this->generateTransactionId();
+
         // Create payment record
         $subscription->payments()->create([
             'amount' => $subscription->price,
             'date' => now(),
             'method' => $validated['payment_method'],
             'status' => 'paid',
+            'transaction_id' => $transactionId,
         ]);
 
         return redirect()->route('receptionist.subscriptions.show', $subscription)

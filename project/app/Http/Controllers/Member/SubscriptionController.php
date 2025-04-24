@@ -153,98 +153,100 @@ class SubscriptionController extends Controller
         }
         
         // For cash payment
-        if ($paymentMethod === 'cash') {
-            try {
-                // Calculate the price based on the plan
-                $prices = [
-                    'Basic' => 29.99,
-                    'Standard' => 49.99,
-                    'Premium' => 79.99
-                ];
-                
-                $basePrice = $prices[$plan] ?? 0;
-                $price = $basePrice * $duration;
-                
-                // Apply any discounts for longer durations
-                if ($duration >= 3) {
-                    $price = $price * 0.95; // 5% discount for 3+ months
-                }
-                if ($duration >= 6) {
-                    $price = $price * 0.9; // Additional 10% discount for 6+ months
-                }
-                
-                // Start a database transaction
-                DB::beginTransaction();
-                
-                $user = Auth::user();
-                
-                // Check if user has an active subscription
-                $activeSubscription = Subscription::where('user_id', $user->id)
-                    ->where('status', 'active')
-                    ->first();
-                    
-                if ($activeSubscription) {
-                    // If extending existing subscription
-                    $startDate = $activeSubscription->end_date;
-                    $endDate = Carbon::parse($startDate)->addMonths($duration);
-                    
-                    $activeSubscription->end_date = $endDate;
-                    $activeSubscription->save();
-                    
-                    $subscriptionId = $activeSubscription->id;
-                } else {
-                    // If creating new subscription
-                    $startDate = now();
-                    $endDate = Carbon::parse($startDate)->addMonths($duration);
-                    
-                    // Set sessions count based on the plan
-                    $sessionsCount = [
-                        'Basic' => 4 * $duration,
-                        'Standard' => 8 * $duration,
-                        'Premium' => 999, // Unlimited
-                    ][$plan] ?? 0;
-                    
-                    // Set trainer zone access based on the plan
-                    $trainerZoneAccess = $plan === 'Premium';
-                    
-                    // Create a pending subscription
-                    $subscription = new Subscription();
-                    $subscription->user_id = $user->id;
-                    $subscription->type = $plan;
-                    $subscription->duration = $duration;	
-                    $subscription->price = $price;
-                    $subscription->start_date = $startDate;
-                    $subscription->end_date = $endDate;
-                    $subscription->status = 'pending'; // Set as pending until cash payment is confirmed
-                    $subscription->payment_method = 'cash';
-                    $subscription->max_sessions_count = $sessionsCount;
-                    $subscription->sessions_left = $sessionsCount;
-                    $subscription->trainer_zone_access = $trainerZoneAccess;
-                    $subscription->save();
-                    
-                    $subscriptionId = $subscription->id;
-                }
-                
-                // Record pending payment
-                $payment = new Payment();
-                $payment->subscription_id = $subscriptionId;
-                $payment->amount = $price;
-                $payment->date = now();
-                $payment->method = 'cash';
-                $payment->status = 'pending';
-                $payment->save();
-                
-                DB::commit();
-                
-                return redirect()->route('dashboard')
-                    ->with('success', 'Your subscription has been reserved. Please visit our reception desk within 24 hours to complete your payment.');
-                    
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return redirect()->route('member.subscription')
-                    ->with('error', 'An error occurred while processing your request: ' . $e->getMessage());
-            }
+        // For cash payment
+if ($paymentMethod === 'cash') {
+    try {
+        // Calculate the price based on the plan
+        $prices = [
+            'Basic' => 29.99,
+            'Standard' => 49.99,
+            'Premium' => 79.99
+        ];
+        
+        $basePrice = $prices[$plan] ?? 0;
+        $price = $basePrice * $duration;
+        
+        // Apply any discounts for longer durations
+        if ($duration >= 3) {
+            $price = $price * 0.95; // 5% discount for 3+ months
         }
+        if ($duration >= 6) {
+            $price = $price * 0.9; // Additional 10% discount for 6+ months
+        }
+        
+        // Start a database transaction
+        DB::beginTransaction();
+        
+        $user = Auth::user();
+        
+        // Check if user has an active subscription
+        $activeSubscription = Subscription::where('user_id', $user->id)
+            ->where('status', 'active')
+            ->first();
+            
+        if ($activeSubscription) {
+            // If extending existing subscription
+            $startDate = $activeSubscription->end_date;
+            $endDate = Carbon::parse($startDate)->addMonths($duration);
+            
+            $activeSubscription->end_date = $endDate;
+            $activeSubscription->save();
+            
+            $subscriptionId = $activeSubscription->id;
+        } else {
+            // If creating new subscription
+            $startDate = now();
+            $endDate = Carbon::parse($startDate)->addMonths($duration);
+            
+            // Set sessions count based on the plan
+            $sessionsCount = [
+                'Basic' => 4 * $duration,
+                'Standard' => 8 * $duration,
+                'Premium' => 999, // Unlimited
+            ][$plan] ?? 0;
+            
+            // Set trainer zone access based on the plan
+            $trainerZoneAccess = $plan === 'Premium';
+            
+          // Create a pending subscription
+$subscription = new Subscription();
+$subscription->user_id = $user->id;
+$subscription->type = $plan;
+$subscription->duration = $duration;    
+$subscription->price = $price;
+$subscription->start_date = $startDate;
+$subscription->end_date = $endDate;
+$subscription->status = 'pending'; // Correctly set to 'pending'
+$subscription->payment_method = 'cash';
+$subscription->max_sessions_count = $sessionsCount;
+$subscription->sessions_left = $sessionsCount;
+$subscription->trainer_zone_access = $trainerZoneAccess;
+$subscription->save();
+
+
+        }
+        
+       // Record pending payment
+$payment = new Payment();
+$payment->subscription_id = $subscriptionId;
+$payment->amount = $price;
+$payment->date = now();
+$payment->method = 'cash';
+$payment->status = 'pending'; // Also correctly set to 'pending'
+$payment->save();
+        
+        DB::commit();
+        
+        // Redirect to the member subscription page with success message
+        return redirect()->route('member.subscription')
+            ->with('success', 'Your subscription has been reserved. Please visit our reception desk within 24 hours to complete your payment.');
+            
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('member.subscription')
+            ->with('error', 'An error occurred while processing your request: ' . $e->getMessage());
+    }
+}
         
         return redirect()->route('member.subscription')
             ->with('error', 'Invalid payment method selected.');
@@ -299,13 +301,13 @@ class SubscriptionController extends Controller
         return response()->json(['id' => $session->id]);
     }
 
-    /**
-     * Handle successful payment from Stripe Checkout.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function handleCheckoutSuccess(Request $request)
+   /**
+ * Handle successful payment from Stripe Checkout.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\Response
+ */
+public function handleCheckoutSuccess(Request $request)
 {
     $sessionId = $request->session_id;
     $plan = $request->plan;
@@ -329,11 +331,14 @@ class SubscriptionController extends Controller
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addMonths($duration);
         
+        // Start transaction
+        DB::beginTransaction();
+        
         // Create new subscription
         $subscription = Subscription::create([
             'user_id' => $user->id,
             'type' => $plan,
-            'duration' => $duration, // This is missing in your current code
+            'duration' => $duration,
             'price' => $price,
             'start_date' => $startDate,
             'end_date' => $endDate,
@@ -342,12 +347,29 @@ class SubscriptionController extends Controller
             'transaction_number' => $session->payment_intent,
         ]);
         
+        // Create payment record for this subscription
+        Payment::create([
+            'subscription_id' => $subscription->id,
+            'amount' => $price,
+            'date' => now(),
+            'method' => 'stripe',
+            'status' => 'paid',
+            'transaction_id' => $session->payment_intent, // Store Stripe's payment intent ID
+            'notes' => 'Online payment via Stripe'
+        ]);
+        
+        // Commit transaction
+        DB::commit();
+        
         // Send email confirmation
         $this->sendSubscriptionEmail($user, $subscription);
         
         return redirect()->route('member.subscription')
             ->with('success', 'Subscription purchased successfully! A confirmation email has been sent to your inbox.');
     } catch (\Exception $e) {
+        // Rollback transaction if there's an error
+        DB::rollBack();
+        
         return redirect()->route('member.subscription')
             ->with('error', 'Error processing payment: ' . $e->getMessage());
     }

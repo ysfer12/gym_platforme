@@ -75,6 +75,24 @@ class MemberController extends Controller
     }
 
     /**
+     * Show the member profile and badge.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function profile()
+    {
+        $user = Auth::user();
+        
+        // Get active subscription
+        $activeSubscription = Subscription::where('user_id', $user->id)
+            ->where('end_date', '>=', Carbon::today())
+            ->where('status', 'active')
+            ->first();
+        
+        return view('member.profile', compact('activeSubscription'));
+    }
+
+    /**
      * Display sessions available for members to book.
      *
      * @return \Illuminate\Http\Response

@@ -344,12 +344,7 @@
                                 <a href="{{ route('admin.users.create') }}" class="block w-full py-2 px-4 rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center font-medium">
                                     Add New User
                                 </a>
-                                <a href="{{ route('admin.sessions.create') }}" class="block w-full py-2 px-4 rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-center font-medium">
-                                    Create Session
-                                </a>
-                                <a href="{{ route('admin.subscriptions.create') }}" class="block w-full py-2 px-4 rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-center font-medium">
-                                    Add Subscription
-                                </a>
+
                                 <a href="{{ route('admin.reports.revenues') }}" class="block w-full py-2 px-4 rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 text-center font-medium">
                                     View Reports
                                 </a>

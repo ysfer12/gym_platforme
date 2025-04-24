@@ -136,6 +136,9 @@ Route::middleware('auth')->group(function () {
             
         Route::post('/subscription/stripe-redirect', [MemberSubscriptionController::class, 'stripeRedirect'])
             ->name('member.subscription.stripe-redirect');
+
+            Route::get('/profile', [MemberController::class, 'profile'])
+            ->name('member.profile');
     });
     
     // Trainer Routes
@@ -267,7 +270,20 @@ Route::middleware('auth')->group(function () {
             ->name('receptionist.trainers');
         Route::get('/trainers/{id}', [ReceptionistController::class, 'trainerDetails'])
             ->name('receptionist.trainers.show');
-    });
+            // Batch payment routes
+Route::get('/payments/batch', [PaymentController::class, 'batchCreate'])->name('receptionist.payments.batch');
+Route::post('/payments/batch', [PaymentController::class, 'batchStore'])->name('receptionist.payments.batch.store');
+Route::get('/payments/search', [PaymentController::class, 'search'])->name('receptionist.payments.search');
+        // Add these routes inside your receptionist middleware group
+Route::get('/members/create', [ReceptionistController::class, 'createMember'])->name('receptionist.members.create');
+Route::post('/members', [ReceptionistController::class, 'storeMember'])->name('receptionist.members.store');
+Route::get('payments/{payment}/receipt', [ReceptionistPaymentController::class, 'generateReceipt'])
+->name('receptionist.payments.receipt');
+
+Route::get('payments/{payment}/email-receipt', [ReceptionistPaymentController::class, 'emailReceipt'])
+->name('receptionist.payments.email-receipt');
+});
+
     
     // Admin Routes
     Route::middleware(['role:Administrator'])->prefix('admin')->group(function () {

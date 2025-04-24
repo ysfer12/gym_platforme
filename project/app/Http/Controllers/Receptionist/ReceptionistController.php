@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Receptionist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Session;
 use App\Models\Subscription;
 use App\Models\Payment;
@@ -14,6 +16,16 @@ use Carbon\Carbon;
 
 class ReceptionistController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:Receptionist']);
+    }
+    
     /**
      * Show the receptionist dashboard.
      *
@@ -27,13 +39,14 @@ class ReceptionistController extends Controller
         // Get today's sessions
         $todaySessionsList = Session::where('date', $today)
             ->orderBy('start_time')
-            ->with(['trainer', 'attendances'])
+            ->with(['trainer', 'attendances.user'])
             ->get();
             
-        // Get recent members
-        $recentMembers = User::where('role', 'Member')
-            ->orderBy('registrationDate', 'desc')
-            ->take(5)
+        // Get recent check-ins
+        $recentCheckIns = Attendance::whereNotNull('entry_time')
+            ->with(['user', 'session'])
+            ->orderBy('entry_time', 'desc')
+            ->limit(10)
             ->get();
             
         // Get expiring subscriptions
@@ -45,24 +58,12 @@ class ReceptionistController extends Controller
             ->with('user')
             ->get();
             
-        // Get pending payments
-        $pendingPayments = Payment::where('status', 'pending')
-            ->with('subscription.user')
-            ->get();
-            
         // Dashboard stats
         $todayCheckIns = Attendance::whereDate('entry_time', $today)->count();
         $activeMembers = User::where('role', 'Member')->where('status', 'Active')->count();
         $todaySessions = Session::where('date', $today)->count();
         $todayRevenue = Payment::whereDate('date', $today)->where('status', 'paid')->sum('amount');
         
-        // Recent check-ins
-        $recentCheckIns = Attendance::whereNotNull('entry_time')
-            ->with(['user', 'session'])
-            ->orderBy('entry_time', 'desc')
-            ->limit(10)
-            ->get();
-            
         // Monthly revenue
         $startOfMonth = Carbon::today()->startOfMonth();
         $monthRevenue = Payment::where('status', 'paid')
@@ -74,18 +75,64 @@ class ReceptionistController extends Controller
         
         return view('dashboards.receptionist', compact(
             'todaySessionsList',
-            'recentMembers',
+            'recentCheckIns',
             'expiringSubscriptions',
-            'pendingPayments',
             'todayCheckIns',
             'activeMembers',
             'todaySessions',
             'todayRevenue',
-            'recentCheckIns',
             'monthRevenue',
             'monthNewSubscriptions'
         ));
     }
+
+
+    /**
+ * Show the form for creating a new member.
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function createMember()
+{
+    return view('receptionist.members.create');
+}
+
+/**
+ * Store a newly created member in the database.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\Response
+ */
+public function storeMember(Request $request)
+{
+    $validated = $request->validate([
+        'firstname' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'address' => 'nullable|string|max:255',
+    ]);
+    
+    // Add required fields
+    $validated['role'] = 'Member';
+    $validated['status'] = 'Active';
+    $validated['registrationDate'] = now();
+    
+    // Generate a random password (you might want to send this to the member via email)
+    $password = Str::random(10);
+    $validated['password'] = Hash::make($password);
+    
+    // Create the new member
+    $member = User::create($validated);
+    
+    // If redirecting to subscription creation
+    if ($request->has('redirect_to_subscription')) {
+        return redirect()->route('receptionist.subscriptions.create', ['user_id' => $member->id])
+            ->with('success', 'Member created successfully. You can now create a subscription for them.');
+    }
+    
+    return redirect()->route('receptionist.members.index')
+        ->with('success', 'Member created successfully.');
+}
 
     /**
      * Display members list
@@ -216,9 +263,6 @@ class ReceptionistController extends Controller
             'check_in_method' => 'receptionist',
         ]);
         
-        // Admin notification integration
-        // You could use event/listener here to notify admin about new booking
-        
         return redirect()->back()->with('success', 'Session booked successfully for this member.');
     }
     
@@ -256,12 +300,6 @@ class ReceptionistController extends Controller
             ->orderBy('date')
             ->orderBy('start_time')
             ->paginate(10);
-            
-        // Get trainer's availability (if implemented)
-        // $availabilities = TrainerAvailability::where('trainer_id', $trainer->id)
-        //     ->orderBy('day_of_week')
-        //     ->orderBy('start_time')
-        //     ->get();
             
         return view('receptionist.trainers.show', compact('trainer', 'upcomingSessions'));
     }
