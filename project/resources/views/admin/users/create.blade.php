@@ -1,4 +1,3 @@
-```php
 <!-- resources/views/admin/users/create.blade.php -->
 @extends('layouts.main')
 
