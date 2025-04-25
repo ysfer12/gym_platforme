@@ -12,7 +12,7 @@
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-20px); }
             100% { transform: translateY(0px); }
         }
 
@@ -37,7 +37,7 @@
 
         /* Animation Classes */
         .animate-fadeInUp { animation: fadeInUp 1s ease forwards; }
-        .animate-float { animation: float 5s infinite ease-in-out; }
+        .animate-float { animation: float 6s infinite ease-in-out; }
         .animate-pulse { animation: pulse 3s infinite ease-in-out; }
 
         /* Hover Effects */
@@ -69,28 +69,6 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* Decorative Elements */
-        .circle-decoration {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 94, 20, 0.15);
-            z-index: 0;
-        }
-
-        .circle-1 {
-            width: 300px;
-            height: 300px;
-            top: -150px;
-            right: -150px;
-        }
-
-        .circle-2 {
-            width: 200px;
-            height: 200px;
-            bottom: -100px;
-            left: -100px;
-        }
-
         /* Diagonal Divider */
         .diagonal-divider {
             position: relative;
@@ -109,23 +87,6 @@
             clip-path: polygon(0 100%, 100% 0, 100% 100%);
         }
 
-        .diagonal-divider-bottom {
-            position: relative;
-            height: 150px;
-            overflow: hidden;
-        }
-
-        .diagonal-divider-bottom::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            clip-path: polygon(0 0, 100% 0, 0 100%);
-        }
-
         /* Custom Checkbox */
         .custom-checkbox {
             display: flex;
@@ -139,7 +100,7 @@
             background: linear-gradient(135deg, #ff5e14, #ff8c00);
             display: flex;
             align-items: center;
-            justify-center: center;
+            justify-content: center;
             margin-right: 12px;
             color: white;
             box-shadow: 0 4px 10px rgba(255, 94, 20, 0.3);
@@ -167,16 +128,6 @@
             transform: scale(1.05) translateY(-15px);
         }
 
-        /* Testimonial Card */
-        .testimonial-card {
-            transition: all 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
-        }
-
         /* Scroll Reveal Animation */
         .reveal {
             opacity: 0;
@@ -196,243 +147,578 @@
             background-clip: text;
             color: transparent;
         }
-
-        /* Blob Shape */
-        .blob-shape {
+        
+        /* Enhanced Hero Section Background Animations */
+        
+        /* Background Pattern */
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zm20.97 0l9.315 9.314-1.414 1.414L34.828 0h2.83zM22.344 0L13.03 9.314l1.414 1.414L25.172 0h-2.83zM32 0l12.142 12.142-1.414 1.414L30 .828 17.272 13.556l-1.414-1.414L28 0h4zM.284 0l28 28-1.414 1.414L0 2.544v-2.26zM0 5.373l25.456 25.455-1.414 1.415L0 8.2V5.374zm0 5.656l22.627 22.627-1.414 1.414L0 13.86v-2.83zm0 5.656l19.8 19.8-1.415 1.413L0 19.514v-2.83zm0 5.657l16.97 16.97-1.414 1.415L0 25.172v-2.83zM0 28l14.142 14.142-1.414 1.414L0 30.828V28zm0 5.657L11.314 44.97 9.9 46.386l-9.9-9.9v-2.828zm0 5.657L8.485 47.8 7.07 49.212 0 42.143v-2.83zm0 5.657l5.657 5.657-1.414 1.415L0 47.8v-2.83zm0 5.657l2.828 2.83-1.414 1.413L0 53.458v-2.83zM54.627 60L30 35.373 5.373 60H8.2L30 38.2 51.8 60h2.827zm-5.656 0L30 41.03 11.03 60h2.828L30 43.858 46.142 60h2.83zm-5.656 0L30 46.686 16.686 60h2.83L30 49.515 40.485 60h2.83zm-5.657 0L30 52.343 22.344 60h2.83L30 55.172 34.828 60h2.83zM32 60l-2-2-2 2h4zM59.716 0l-28 28 1.414 1.414L60 2.544V0h-.284zM60 5.373L34.544 30.828l1.414 1.415L60 8.2V5.374zm0 5.656L37.373 33.656l1.414 1.414L60 13.86v-2.83zm0 5.656l-19.8 19.8 1.415 1.413L60 19.514v-2.83zm0 5.657l-16.97 16.97 1.414 1.415L60 25.172v-2.83zM60 28L45.858 42.142l1.414 1.414L60 30.828V28zm0 5.657L48.686 44.97l1.415 1.415 9.9-9.9v-2.828zm0 5.657L51.515 47.8l1.414 1.413 7.07-7.07v-2.83zm0 5.657l-5.657 5.657 1.414 1.415L60 47.8v-2.83zm0 5.657l-2.828 2.83 1.414 1.413L60 53.458v-2.83z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        /* Animated Orbs */
+        .orb {
             position: absolute;
-            z-index: -1;
-            opacity: 0.1;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.5;
+            z-index: 5;
+            animation: float 12s ease-in-out infinite;
         }
-
-        /* Class Schedule Styles */
-        .schedule-tab {
-            transition: all 0.3s ease;
+        
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,94,20,0.7) 0%, rgba(255,122,0,0) 70%);
+            top: 10%;
+            right: 15%;
+            animation-delay: 0s;
         }
-
-        .schedule-tab.active {
-            background: linear-gradient(to right, #ff5e14, #ff8c00);
-            color: white;
-            box-shadow: 0 10px 15px -3px rgba(255, 94, 20, 0.3), 0 4px 6px -2px rgba(255, 94, 20, 0.2);
+        
+        .orb-2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255,140,0,0.7) 0%, rgba(255,149,0,0) 70%);
+            bottom: 15%;
+            left: 10%;
+            animation-delay: -3s;
         }
-
-        .schedule-item {
-            transition: all 0.3s ease;
+        
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,94,20,0.5) 0%, rgba(255,122,0,0) 70%);
+            top: 40%;
+            left: 25%;
+            animation-delay: -6s;
         }
-
-        .schedule-item:hover {
-            background-color: #fff8f1;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Gallery Styles */
-        .gallery-item {
-            overflow: hidden;
-            position: relative;
-            border-radius: 12px;
-        }
-
-        .gallery-item img {
-            transition: all 0.5s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-item .overlay {
+        
+        /* Animated Lines */
+        .lines-container {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+            overflow: hidden;
+            opacity: 0.3;
+        }
+        
+        .line {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(255,94,20,0) 0%, rgba(255,94,20,1) 50%, rgba(255,94,20,0) 100%);
+            animation: line-move 15s infinite linear;
+        }
+        
+        .line-1 {
+            height: 50vh;
+            left: 25%;
+            top: -50%;
+            animation-delay: 0s;
+        }
+        
+        .line-2 {
+            height: 60vh;
+            left: 65%;
+            top: -60%;
+            animation-delay: -5s;
+        }
+        
+        .line-3 {
+            height: 40vh;
+            left: 45%;
+            top: -40%;
+            animation-delay: -10s;
+        }
+        
+        /* Particles Overlay */
+        .particles-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23ffffff' fill-opacity='0.15' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        /* Hero Image Styling */
+        .hero-image-container {
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .hero-glow {
+            position: absolute;
+            inset: -10px;
+            background: linear-gradient(45deg, rgba(255,94,20,0.5), rgba(255,140,0,0.5));
+            border-radius: 24px;
+            filter: blur(25px);
+            opacity: 0.6;
+            animation: glow-pulse 6s infinite alternate;
+            z-index: 1;
+        }
+        
+        .hero-image {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+        
+        .hero-image img {
+            transform: scale(1);
+            transition: transform 10s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        }
+        
+        .hero-image:hover img {
+            transform: scale(1.1);
+        }
+        
+        .hero-text {
             opacity: 0;
-            transition: all 0.3s ease;
+            transform: translateY(30px);
+            animation: text-reveal 1s forwards 0.5s;
         }
-
-        .gallery-item:hover .overlay {
-            opacity: 1;
-        }
-
-        /* Program Card Styles */
-        .program-card {
+        
+        /* Floating Cards */
+        .floating-card {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 3;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
-
-        .program-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        
+        .floating-card-1 {
+            bottom: -30px;
+            left: -30px;
+            animation: float 6s ease-in-out infinite;
         }
-
-        .program-card .program-image {
-            height: 200px;
-            overflow: hidden;
+        
+        .floating-card-2 {
+            top: 30%;
+            right: -20px;
+            animation: float 8s ease-in-out infinite 1s;
         }
-
-        .program-card .program-image img {
-            transition: all 0.5s ease;
-        }
-
-        .program-card:hover .program-image img {
-            transform: scale(1.1);
-        }
-
-        /* Blog Card Styles */
-        .blog-card {
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .blog-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .blog-card .blog-image {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .blog-card .blog-image img {
-            transition: all 0.5s ease;
-        }
-
-        .blog-card:hover .blog-image img {
-            transform: scale(1.1);
-        }
-
-        /* Trainer Card Styles */
-        .trainer-card {
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .trainer-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .trainer-card .trainer-image {
-            height: 300px;
-            overflow: hidden;
-        }
-
-        .trainer-card .trainer-image img {
-            transition: all 0.5s ease;
-        }
-
-        .trainer-card:hover .trainer-image img {
-            transform: scale(1.1);
-        }
-
-        .social-icon {
-            width: 36px;
-            height: 36px;
+        
+        .floating-card-icon {
+            background: linear-gradient(to right, #ff5e14, #ff8c00);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
+        }
+        
+        .badge-element {
+            position: absolute;
+            top: 20px;
+            right: -10px;
+            background: linear-gradient(to right, #ff5e14, #ff8c00);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            z-index: 3;
+            box-shadow: 0 5px 15px rgba(255, 94, 20, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .counter {
+            animation: countUp 2.5s ease-out forwards 1s;
+            opacity: 0;
+        }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to bottom right, #ff5e14, #ff8c00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(255, 94, 20, 0.3);
+            animation: bounce 2s infinite;
+            margin: 0 auto;
+        }
+        
+        /* Additional Keyframe Animations */
+        @keyframes line-move {
+            0% { transform: translateY(0%); }
+            100% { transform: translateY(1000%); }
+        }
+        
+        @keyframes glow-pulse {
+            0% { opacity: 0.4; filter: blur(20px); }
+            100% { opacity: 0.7; filter: blur(30px); }
+        }
+        
+        @keyframes text-reveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* New Styles for Added Sections */
+        /* Best Equipment & Trainers Section */
+        .trainer-benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .trainer-benefit-icon {
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background-color: rgba(255, 94, 20, 0.1);
             color: #ff5e14;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        
+        .info-box {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 24px;
+            height: 100%;
             transition: all 0.3s ease;
         }
-
-        .social-icon:hover {
-            background-color: #ff5e14;
+        
+        .info-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+        }
+        
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+        }
+        
+        /* Classes Section */
+        .class-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .class-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+        }
+        
+        .class-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .class-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .class-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
             color: white;
-            transform: translateY(-3px);
+        }
+        
+        .class-type {
+            position: absolute;
+            top: 0;
+            right: 0;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            padding: 16px 8px;
+            background-color: rgba(255, 94, 20, 0.8);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Workout Section */
+        .workout-section {
+            position: relative;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+        
+        .workout-arrow {
+            position: absolute;
+            height: 100%;
+            width: 30%;
+            background: #ff5e14;
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+            left: 28%;
+            top: 0;
+        }
+        
+        .workout-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .workout-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .workout-number {
+            width: 24px;
+            height: 24px;
+            background: #ff5e14;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-weight: bold;
+        }
+        
+        /* Testimonials and BMI Calculator Section */
+        .testimonial-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bmi-calculator {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 24px;
+            color: white;
+        }
+        
+        .bmi-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            padding: 12px;
+            color: white;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        
+        .bmi-result {
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .calculate-btn {
+            background: #ff5e14;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .calculate-btn:hover {
+            background: #e65012;
+        }
+
+        /* Discount Banner */
+        .discount-banner {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            height: 100%;
+        }
+        
+        .discount-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .discount-text {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            text-align: right;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .discount-percentage {
+            font-size: 5rem;
+            line-height: 1;
         }
     </style>
 @endsection
 
 @section('content')
-    <!-- Hero Section -->
+    <!-- Enhanced Hero Section with Advanced Background Animation -->
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Image with Overlay -->
+        <!-- Video Background with Advanced Overlay Effects -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                 alt="Gym Background"
-                 class="absolute inset-0 w-full h-full object-cover">
-            <div class="absolute inset-0 animated-gradient opacity-80"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-orange-900/60 z-10"></div>
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover scale-105">
+                <source src="https://cdn.coverr.co/videos/coverr-people-working-out-at-the-gym-3287/1080p.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-pattern z-20 opacity-20"></div>
         </div>
 
-        <!-- Decorative Elements -->
-        <div class="circle-decoration circle-1"></div>
-        <div class="circle-decoration circle-2"></div>
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 z-10 pointer-events-none">
+            <!-- Animated Gradient Orbs -->
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+            
+            <!-- Dynamic Lines/Particles -->
+            <div class="lines-container">
+                <div class="line line-1"></div>
+                <div class="line line-2"></div>
+                <div class="line line-3"></div>
+            </div>
+            
+            <!-- Subtle Particle Overlay -->
+            <div class="particles-overlay"></div>
+        </div>
 
-        <!-- SVG Blob Shapes -->
-        <svg class="blob-shape" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width: 600px; height: 600px; right: -300px; top: -100px;">
-            <path fill="#FF5E14" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,88.5,-1.5C87,13.4,81.3,26.8,73.6,39.2C65.9,51.7,56.1,63.3,43.4,70.7C30.7,78.1,15.3,81.4,0.4,80.8C-14.6,80.2,-29.2,75.7,-42.2,68.1C-55.2,60.5,-66.7,49.8,-74.4,36.6C-82.1,23.4,-86,7.7,-83.9,-7.1C-81.8,-21.9,-73.7,-35.7,-63.3,-44.7C-52.9,-53.6,-40.2,-57.6,-28.5,-65.9C-16.8,-74.2,-6.1,-86.8,5.4,-95.8C16.8,-104.8,33.7,-110.2,44.7,-76.4Z" transform="translate(100 100)" />
-        </svg>
-
-        <svg class="blob-shape" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width: 500px; height: 500px; left: -250px; bottom: -200px;">
-            <path fill="#FF5E14" d="M45.3,-77.5C58.9,-71.2,70.5,-59.9,79.2,-46.3C87.9,-32.7,93.7,-16.3,93.2,-0.3C92.7,15.7,85.8,31.5,76.7,45.8C67.5,60.2,56,73.1,41.7,79.9C27.4,86.7,10.2,87.3,-6.9,86.6C-24,85.9,-41,83.9,-54.8,76.1C-68.6,68.2,-79.2,54.5,-85.9,39.2C-92.6,24,-95.4,7.1,-93.3,-9.2C-91.2,-25.5,-84.2,-41.2,-73.4,-53.3C-62.6,-65.4,-48,-73.9,-33.5,-79.5C-19,-85.1,-4.7,-87.8,8.5,-85.1C21.7,-82.4,43.3,-74.3,45.3,-77.5Z" transform="translate(100 100)" />
-        </svg>
-
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="text-white space-y-8 animate-fadeInUp">
-                    <div class="inline-block px-4 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-sm font-semibold mb-2">
-                        #1 FITNESS CENTER IN THE CITY
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 text-white space-y-8 animate-fadeInUp">
+                    <div class="inline-block px-5 py-2 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 text-sm font-semibold mb-4 shadow-xl">
+                        <span class="flex items-center">
+                            <span class="w-3 h-3 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
+                            TRANSFORM YOUR BODY & MIND
+                        </span>
                     </div>
-                    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight">
-                        ELEVATE YOUR <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-yellow-200">FITNESS</span>
+                    
+                    <h1 class="text-5xl md:text-8xl font-extrabold leading-none hero-text">
+                        DREAM <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">BIG</span>, 
+                        <br class="hidden md:block">TRAIN <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">TOGETHER</span>
                     </h1>
-                    <p class="text-xl md:text-2xl font-light max-w-xl leading-relaxed">
-                        Join City Club Gym today and embark on a fitness journey guided by expert trainers using state-of-the-art equipment.
+                    
+                    <p class="text-xl md:text-2xl font-light max-w-xl leading-relaxed text-gray-300">
+                        Where your fitness dreams become reality. Join our community of dreamers, achievers, and fitness enthusiasts guided by world-class trainers.
                     </p>
-                    <div class="pt-4 flex flex-wrap gap-6">
-                        <a href="#" class="btn-3d px-10 py-5 bg-white text-orange-600 font-bold rounded-full hover:shadow-xl transition-all duration-300 flex items-center">
-                            <span>GET STARTED NOW</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    
+                    <div class="pt-6 flex flex-wrap gap-6">
+                        <a href="#" class="btn-3d group px-10 py-5 bg-orange-500 text-white font-bold rounded-full hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-600/20 transition-all duration-300 flex items-center">
+                            <span>START YOUR JOURNEY</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </a>
-                        <a href="{{ route('subscriptions') }}" class="px-10 py-5 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-orange-600 transition-all duration-300">
-                            VIEW PLANS
+                        <a href="{{ route('subscriptions') }}" class="group px-10 py-5 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-orange-600 transition-all duration-300 flex items-center">
+                            <span>EXPLORE MEMBERSHIPS</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
                         </a>
                     </div>
-                    <div class="flex items-center space-x-12 pt-8">
-                        <div class="flex flex-col items-center">
-                            <span class="text-5xl font-bold">50+</span>
-                            <span class="text-sm uppercase tracking-wider mt-1">Expert<br>Trainers</span>
+                    
+                    <!-- Stats with animated counter -->
+                    <div class="flex flex-wrap items-center gap-5 pt-8">
+                        <div class="stats-card">
+                            <span class="text-5xl font-bold counter">5000+</span>
+                            <span class="text-sm uppercase tracking-wider mt-1 text-gray-300">Satisfied<br>Members</span>
                         </div>
-                        <div class="w-px h-16 bg-white/30"></div>
-                        <div class="flex flex-col items-center">
-                            <span class="text-5xl font-bold">100+</span>
-                            <span class="text-sm uppercase tracking-wider mt-1">Weekly<br>Classes</span>
+                        <div class="stats-card">
+                            <span class="text-5xl font-bold counter">150+</span>
+                            <span class="text-sm uppercase tracking-wider mt-1 text-gray-300">Weekly<br>Classes</span>
                         </div>
-                        <div class="w-px h-16 bg-white/30"></div>
-                        <div class="flex flex-col items-center">
-                            <span class="text-5xl font-bold">24/7</span>
-                            <span class="text-sm uppercase tracking-wider mt-1">Access<br>Available</span>
+                        <div class="stats-card">
+                            <span class="text-5xl font-bold counter">24/7</span>
+                            <span class="text-sm uppercase tracking-wider mt-1 text-gray-300">Access<br>Available</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="hidden lg:block">
-                    <div class="relative">
-                        <div class="absolute -top-10 -left-10 w-full h-full bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl transform rotate-6 opacity-20"></div>
-                        <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="Fitness Transformation"
-                             class="rounded-3xl shadow-2xl animate-float relative z-10">
-                        <div class="absolute -bottom-8 -left-8 glass text-white p-6 rounded-xl z-20">
+                <div class="hidden lg:block lg:col-span-5">
+                    <div class="relative hero-image-container">
+                        <!-- Glow Effect -->
+                        <div class="hero-glow"></div>
+                        
+                        <!-- Main Image with Glass Effect -->
+                        <div class="hero-image">
+                            <img src="https://images.unsplash.com/photo-1637666030574-a66e15bf9332?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                                 alt="Fitness Transformation"
+                                 class="w-full h-[600px] object-cover">
+                        </div>
+                                 
+                        <!-- Floating Card Elements -->
+                        <div class="floating-card floating-card-1">
                             <div class="flex items-center space-x-4">
-                                <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-full p-3">
-                                    <i class="bx bx-heart-circle text-3xl"></i>
+                                <div class="floating-card-icon">
+                                    <i class="bx bx-badge-check text-3xl"></i>
                                 </div>
                                 <div>
-                                    <p class="font-bold">Sarah Transformed</p>
-                                    <p class="text-sm opacity-80">Lost 45 pounds in 6 months</p>
+                                    <p class="font-bold text-lg">Proven Results</p>
+                                    <div class="flex mt-1">
+                                        <i class="bx bxs-star text-yellow-400"></i>
+                                        <i class="bx bxs-star text-yellow-400"></i>
+                                        <i class="bx bxs-star text-yellow-400"></i>
+                                        <i class="bx bxs-star text-yellow-400"></i>
+                                        <i class="bx bxs-star text-yellow-400"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Floating Badge -->
-                        <div class="absolute -top-5 -right-5 bg-white text-orange-600 px-4 py-2 rounded-full font-bold shadow-lg z-20 animate-pulse">
-                            Join Today!
+                        <!-- Top Right Badge -->
+                        <div class="badge-element">
+                            <span class="flex items-center">
+                                <i class="bx bx-timer mr-2"></i>
+                                Limited Time Offer!
+                            </span>
+                        </div>
+                        
+                        <!-- User Testimonial -->
+                        <div class="floating-card floating-card-2">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full border-2 border-orange-400" alt="Member">
+                                <div class="text-white">
+                                    <p class="font-bold">Sarah J.</p>
+                                    <p class="text-xs text-gray-300">Lost 45 lbs in 6 months</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -440,9 +726,9 @@
         </div>
 
         <!-- Scroll Down Indicator -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-center">
-            <p class="text-sm mb-2 opacity-80">Scroll Down</p>
-            <div class="animate-bounce w-12 h-12 mx-auto bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center">
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-center z-20">
+            <p class="text-sm mb-2 opacity-80">Scroll to discover more</p>
+            <div class="scroll-indicator">
                 <i class="bx bx-chevron-down text-2xl"></i>
             </div>
         </div>
@@ -451,8 +737,128 @@
     <!-- Diagonal Divider -->
     <div class="diagonal-divider bg-orange-500"></div>
 
-    <!-- Features Section -->
+    <!-- NEW SECTION: Best Equipment & Trainers (based on Image 1) -->
     <section class="py-24 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Column - Image -->
+                <div class="reveal">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Fitness Trainers" 
+                         class="rounded-lg shadow-xl w-full">
+                    <div class="flex space-x-2 mt-4">
+                        <div class="w-3 h-3 bg-yellow-400 transform rotate-45"></div>
+                        <div class="w-3 h-3 bg-yellow-400 transform rotate-45"></div>
+                        <div class="w-3 h-3 bg-yellow-400 transform rotate-45"></div>
+                        <div class="w-3 h-3 bg-gray-800 transform rotate-45"></div>
+                        <div class="w-3 h-3 bg-gray-800 transform rotate-45"></div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Content -->
+                <div class="space-y-8 reveal" style="transition-delay: 0.2s;">
+                    <div>
+                        <p class="text-orange-500 font-semibold">SINCE 2005</p>
+                        <h2 class="text-4xl md:text-5xl font-bold mt-2">
+                            BEST <span class="text-orange-500">EQUIPMENTS</span> 
+                            <br>& <span class="text-orange-500">FITNESS</span> TRAINERS
+                        </h2>
+                    </div>
+                    
+                    <p class="text-gray-600">
+                        Gym is very important to maintain our health. TrainTogether offers the best equipment and certified trainers to help you achieve your fitness goals, whether you're looking to lose weight, build muscle, or improve your overall health.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="trainer-benefit-item">
+                            <div class="trainer-benefit-icon">
+                                <i class="bx bx-check"></i>
+                            </div>
+                            <span>Builds Aerobic Power</span>
+                        </div>
+                        <div class="trainer-benefit-item">
+                            <div class="trainer-benefit-icon">
+                                <i class="bx bx-check"></i>
+                            </div>
+                            <span>Strong body Structure</span>
+                        </div>
+                        <div class="trainer-benefit-item">
+                            <div class="trainer-benefit-icon">
+                                <i class="bx bx-check"></i>
+                            </div>
+                            <span>Boots your Memory</span>
+                        </div>
+                        <div class="trainer-benefit-item">
+                            <div class="trainer-benefit-icon">
+                                <i class="bx bx-check"></i>
+                            </div>
+                            <span>Bring about restful Sleep</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                            LET'S START
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-orange-500 transition duration-300">
+                            <div class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center">
+                                <i class="bx bx-play text-orange-500"></i>
+                            </div>
+                            <span>INTRO VIDEO</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Boxes -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+                <!-- Info Box 1 -->
+                <div class="info-box text-white reveal" style="transition-delay: 0.1s;">
+                    <img src="{{ asset('images/dumbbell-icon.svg') }}" alt="Best Training" class="info-icon" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/dumbbell.png'">
+                    <h3 class="text-xl font-bold mb-2">Best Training</h3>
+                    <p class="text-gray-400">Expert training programs designed to maximize results and minimize injury risk, tailored to your individual needs.</p>
+                </div>
+                
+                <!-- Info Box 2 -->
+                <div class="info-box text-white reveal" style="transition-delay: 0.2s;">
+                    <img src="{{ asset('images/trainer-icon.svg') }}" alt="Qualified Instructor" class="info-icon" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/personal-trainer.png'">
+                    <h3 class="text-xl font-bold mb-2">Qualified Instructor</h3>
+                    <p class="text-gray-400">Our certified instructors bring years of expertise to help you achieve your fitness goals with professional guidance.</p>
+                </div>
+                
+                <!-- Info Box 3 -->
+                <div class="info-box text-white reveal" style="transition-delay: 0.3s;">
+                    <img src="{{ asset('images/equipment-icon.svg') }}" alt="Latest Equipment" class="info-icon" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/gym-equipment.png'">
+                    <h3 class="text-xl font-bold mb-2">Latest Equipment</h3>
+                    <p class="text-gray-400">State-of-the-art fitness equipment to provide you with the best workout experience and optimal results.</p>
+                </div>
+                
+                <!-- Info Box 4 -->
+                <div class="info-box text-white reveal" style="transition-delay: 0.4s;">
+                    <img src="{{ asset('images/award-icon.svg') }}" alt="Award Winners" class="info-icon" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/trophy.png'">
+                    <h3 class="text-xl font-bold mb-2">Award Winners</h3>
+                    <p class="text-gray-400">Our trainers and facilities have been recognized with multiple industry awards for excellence and service.</p>
+                </div>
+            </div>
+            
+            <!-- Discount Banner (from Image 1 bottom section) -->
+            <div class="mt-12 reveal" style="transition-delay: 0.5s;">
+                <div class="discount-banner">
+                    <img src="https://images.unsplash.com/photo-1577221084712-45b0445d2b00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1498&q=80" 
+                         alt="Discount Offer" 
+                         class="w-full h-64 object-cover rounded-lg">
+                    <div class="discount-text">
+                        <div class="discount-percentage">35%</div>
+                        <div class="text-2xl uppercase">Discount</div>
+                        <div class="text-sm mt-2">Limited time offer for new members</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-24 bg-gray-50 relative overflow-hidden">
         <!-- Decorative Elements -->
         <div class="absolute top-0 right-0 w-64 h-64 bg-orange-100 rounded-full opacity-50 transform translate-x-1/3 -translate-y-1/3"></div>
         <div class="absolute bottom-0 left-0 w-64 h-64 bg-orange-100 rounded-full opacity-50 transform -translate-x-1/3 translate-y-1/3"></div>
@@ -461,10 +867,10 @@
             <div class="text-center mb-20">
                 <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">WHY CHOOSE US</span>
                 <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Elevate Your <span class="gradient-text">Fitness Experience</span>
+                    Elevate Your <span class="gradient-text">Fitness Journey</span>
                 </h2>
                 <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    City Club offers a premium fitness environment with everything you need to achieve your health and wellness goals.
+                    TrainTogether offers a premium fitness environment with everything you need to achieve your health and wellness goals.
                 </p>
             </div>
 
@@ -481,7 +887,7 @@
                                 <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center mr-3">
                                     <i class="bx bx-dumbbell text-xl"></i>
                                 </div>
-                                <h3 class="text-xl font-bold">State-of-the-Art Equipment</h3>
+                                <h3 class="text-xl font-bold">Premium Equipment</h3>
                             </div>
                         </div>
                     </div>
@@ -494,13 +900,13 @@
                                 <div class="custom-checkbox-icon">
                                     <i class="bx bx-check text-lg"></i>
                                 </div>
-                                <span class="text-gray-700 font-medium">Premium cardio machines</span>
+                                <span class="text-gray-700 font-medium">High-end cardio machines</span>
                             </li>
                             <li class="flex items-center">
                                 <div class="custom-checkbox-icon">
                                     <i class="bx bx-check text-lg"></i>
                                 </div>
-                                <span class="text-gray-700 font-medium">Free weight area</span>
+                                <span class="text-gray-700 font-medium">Extensive free weight area</span>
                             </li>
                             <li class="flex items-center">
                                 <div class="custom-checkbox-icon">
@@ -524,7 +930,7 @@
                                 <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center mr-3">
                                     <i class="bx bx-user-voice text-xl"></i>
                                 </div>
-                                <h3 class="text-xl font-bold">Expert Certified Trainers</h3>
+                                <h3 class="text-xl font-bold">Elite Certified Trainers</h3>
                             </div>
                         </div>
                     </div>
@@ -543,7 +949,7 @@
                                 <div class="custom-checkbox-icon">
                                     <i class="bx bx-check text-lg"></i>
                                 </div>
-                                <span class="text-gray-700 font-medium">Customized workout plans</span>
+                                <span class="text-gray-700 font-medium">Custom workout plans</span>
                             </li>
                             <li class="flex items-center">
                                 <div class="custom-checkbox-icon">
@@ -601,6 +1007,158 @@
         </div>
     </section>
 
+    <!-- NEW SECTION: Classes We Provide (based on Image 2) -->
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="text-orange-500">CLASSES</span> WE PROVIDE
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-gray-600">
+                    Our gym classes offer a diverse range of workouts designed to help you achieve your fitness goals, 
+                    led by experienced instructors in a motivating environment.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Class 1 -->
+                <div class="class-card reveal">
+                    <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" 
+                         alt="Body Building Class">
+                    <div class="class-type">BODY BUILDING CLASS</div>
+                    <div class="class-info">
+                        <p class="text-sm font-bold">Duration: 50 Minutes</p>
+                    </div>
+                </div>
+
+                <!-- Class 2 -->
+                <div class="class-card reveal" style="transition-delay: 0.2s;">
+                    <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Fitness Class">
+                    <div class="class-type">FITNESS CLASS</div>
+                    <div class="class-info">
+                        <p class="text-sm font-bold">Duration: 45 Minutes</p>
+                    </div>
+                </div>
+
+                <!-- Class 3 -->
+                <div class="class-card reveal" style="transition-delay: 0.4s;">
+                    <img src="https://images.unsplash.com/photo-1532029837206-abbe2b7620e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Crossfit Class">
+                    <div class="class-type">CROSSFIT CLASS</div>
+                    <div class="class-info">
+                        <p class="text-sm font-bold">Duration: 35 Minutes</p>
+                    </div>
+                </div>
+
+                <!-- Class 4 -->
+                <div class="class-card reveal" style="transition-delay: 0.6s;">
+                    <img src="https://images.unsplash.com/photo-1510894347713-fc3ed6fdf539?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Yoga Class">
+                    <div class="class-type">YOGA CLASS</div>
+                    <div class="class-info">
+                        <p class="text-sm font-bold">Duration: 25 Minutes</p>
+                    </div>
+                </div>
+
+                <!-- Class 5 -->
+                <div class="class-card reveal" style="transition-delay: 0.8s;">
+                    <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Martial Art Class">
+                    <div class="class-type">MARTIAL ART CLASS</div>
+                    <div class="class-info">
+                        <p class="text-sm font-bold">Duration: 30 Minutes</p>
+                    </div>
+                </div>
+
+                <!-- Class 6 -->
+                <div class="class-card reveal" style="transition-delay: 1s;">
+                    <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Cardio Class">
+                    <div class="class-type">CARDIO CLASS</div>
+                    <div class="class-info">
+                        <p class="text-sm font-bold">Duration: 40 Minutes</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="{{ route('sessions') }}" class="btn-3d inline-block px-10 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-xl transition-all duration-300">
+                    VIEW ALL CLASSES
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Classical Workout (based on Image 3) -->
+    <section class="py-16 workout-section relative overflow-hidden">
+        <div class="workout-arrow"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="text-white workout-content reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">CLASSICAL<br>WORKOUT</h2>
+                    <p class="text-gray-400 mb-8">
+                        Our classical workout routine combines traditional exercises with modern techniques for 
+                        optimal results. Follow these steps for a complete full-body workout experience.
+                    </p>
+                    <a href="#" class="text-orange-500 font-bold hover:text-orange-400 transition-colors inline-flex items-center">
+                        VIEW SCHEDULE 
+                        <i class="bx bx-right-arrow-alt ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="workout-steps reveal" style="transition-delay: 0.3s;">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Step 1 -->
+                        <div class="flex flex-col items-center">
+                            <img src="https://images.unsplash.com/photo-1566501206188-5dd0cf160a0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
+                                 alt="Downward Dog" 
+                                 class="rounded-lg mb-2 h-32 w-full object-cover">
+                            <div class="workout-step">
+                                <div class="workout-number">1</div>
+                                <span class="text-white">Downward Dog</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="flex flex-col items-center">
+                            <img src="https://images.unsplash.com/photo-1517637382994-f02da38c6728?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1473&q=80" 
+                                 alt="Cobra Pose" 
+                                 class="rounded-lg mb-2 h-32 w-full object-cover">
+                            <div class="workout-step">
+                                <div class="workout-number">2</div>
+                                <span class="text-white">Cobra Pose</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="flex flex-col items-center">
+                            <img src="https://images.unsplash.com/photo-1599447292325-2caba821a6a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                 alt="Lunge Stretch" 
+                                 class="rounded-lg mb-2 h-32 w-full object-cover">
+                            <div class="workout-step">
+                                <div class="workout-number">3</div>
+                                <span class="text-white">Lunge Stretch</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4 -->
+                        <div class="flex flex-col items-center">
+                        <img src="https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                 alt="Child's Pose" 
+                                 class="rounded-lg mb-2 h-32 w-full object-cover">
+                            <div class="workout-step">
+                                <div class="workout-number">4</div>
+                                <span class="text-white">Child's Pose</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Section -->
     <section class="py-16 bg-gradient-to-r from-orange-600 to-orange-500 text-white">
         <div class="container mx-auto px-4">
@@ -625,573 +1183,126 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: Gym Facilities/Gallery -->
-    <section class="py-24 bg-white relative overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-20">
-                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">OUR FACILITIES</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    State-of-the-Art <span class="gradient-text">Gym Facilities</span>
-                </h2>
-                <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Experience premium fitness with our modern equipment and specialized training areas.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Gallery Item 1 -->
-                <div class="gallery-item reveal">
-                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                         alt="Cardio Area"
-                         class="w-full h-80 object-cover">
-                    <div class="overlay flex items-end p-6">
-                        <div>
-                            <h3 class="text-white text-xl font-bold">Cardio Area</h3>
-                            <p class="text-white/80 text-sm">Latest treadmills, ellipticals, and bikes</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 2 -->
-                <div class="gallery-item reveal" style="transition-delay: 0.1s;">
-                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                         alt="Free Weights"
-                         class="w-full h-80 object-cover">
-                    <div class="overlay flex items-end p-6">
-                        <div>
-                            <h3 class="text-white text-xl font-bold">Free Weights</h3>
-                            <p class="text-white/80 text-sm">Comprehensive selection for all training needs</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 3 -->
-                <div class="gallery-item reveal" style="transition-delay: 0.2s;">
-                    <img src="https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
-                         alt="Yoga Studio"
-                         class="w-full h-80 object-cover">
-                    <div class="overlay flex items-end p-6">
-                        <div>
-                            <h3 class="text-white text-xl font-bold">Yoga Studio</h3>
-                            <p class="text-white/80 text-sm">Peaceful environment for mind-body wellness</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 4 -->
-                <div class="gallery-item reveal" style="transition-delay: 0.3s;">
-                    <img src="https://images.unsplash.com/photo-1570829460005-c840387bb1ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80"
-                         alt="Swimming Pool"
-                         class="w-full h-80 object-cover">
-                    <div class="overlay flex items-end p-6">
-                        <div>
-                            <h3 class="text-white text-xl font-bold">Swimming Pool</h3>
-                            <p class="text-white/80 text-sm">Olympic-sized pool for aquatic workouts</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 5 -->
-                <div class="gallery-item reveal" style="transition-delay: 0.4s;">
-                    <img src="https://images.unsplash.com/photo-1571388208497-71bedc66e932?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80"
-                         alt="Group Class Room"
-                         class="w-full h-80 object-cover">
-                    <div class="overlay flex items-end p-6">
-                        <div>
-                            <h3 class="text-white text-xl font-bold">Group Class Room</h3>
-                            <p class="text-white/80 text-sm">Spacious area for energetic group workouts</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 6 -->
-                <div class="gallery-item reveal" style="transition-delay: 0.5s;">
-                    <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                         alt="Locker Rooms"
-                         class="w-full h-80 object-cover">
-                    <div class="overlay flex items-end p-6">
-                        <div>
-                            <h3 class="text-white text-xl font-bold">Luxury Locker Rooms</h3>
-                            <p class="text-white/80 text-sm">Premium amenities and spa-like atmosphere</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#" class="btn-3d inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-xl transition-all duration-300">
-                    <span>TAKE A VIRTUAL TOUR</span>
-                    <i class='bx bx-right-arrow-alt ml-2 text-xl'></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: Class Schedule -->
+    <!-- NEW SECTION: Testimonials and BMI Calculator (based on Image 4) -->
     <section class="py-24 bg-gray-50 relative overflow-hidden">
         <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">CLASS SCHEDULE</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Find Your Perfect <span class="gradient-text">Workout</span>
-                </h2>
-                <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Choose from our diverse range of classes led by expert instructors to achieve your fitness goals.
-                </p>
-            </div>
-
-            <!-- Schedule Tabs -->
-            <div class="flex flex-wrap justify-center mb-8 gap-2" x-data="{ activeTab: 'monday' }">
-                <button @click="activeTab = 'monday'" :class="{ 'active': activeTab === 'monday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Monday</button>
-                <button @click="activeTab = 'tuesday'" :class="{ 'active': activeTab === 'tuesday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Tuesday</button>
-                <button @click="activeTab = 'wednesday'" :class="{ 'active': activeTab === 'wednesday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Wednesday</button>
-                <button @click="activeTab = 'thursday'" :class="{ 'active': activeTab === 'thursday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Thursday</button>
-                <button @click="activeTab = 'friday'" :class="{ 'active': activeTab === 'friday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Friday</button>
-                <button @click="activeTab = 'saturday'" :class="{ 'active': activeTab === 'saturday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Saturday</button>
-                <button @click="activeTab = 'sunday'" :class="{ 'active': activeTab === 'sunday' }" class="schedule-tab px-6 py-3 rounded-full font-medium text-gray-700">Sunday</button>
-            </div>
-
-            <!-- Schedule Content -->
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
-                <!-- Monday Schedule -->
-                <div x-show="activeTab === 'monday'" class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Class 1 -->
-                        <div class="schedule-item p-6 rounded-xl border border-gray-100">
-                            <div class="flex justify-between items-start mb-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Testimonials Column -->
+                <div class="reveal">
+                    <div class="mb-8">
+                        <p class="text-sm font-semibold text-orange-500">TESTIMONIALS</p>
+                        <h2 class="text-4xl font-bold mt-2">
+                            THAT'S WHAT OUR<br><span class="text-orange-500">CLIENT</span> SAYS
+                        </h2>
+                    </div>
+                    
+                    <div class="testimonial-slider bg-white p-8 rounded-lg shadow-lg">
+                        <blockquote class="italic text-gray-700 mb-4">
+                            "TrainTogether is very smart and technically sound gym, which maintains professional trainer as well as modern equipments. It helped me to maintain my health lutpas sit fugit, sed quia cuuntur magni dolores eos qui rat ione volupta pleasure rationally."
+                        </blockquote>
+                        <div class="flex items-center">
+                            <div class="mr-4">
+                                <div class="w-16 h-16 rounded-full overflow-hidden">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Stephen Fleming" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-bold text-lg">Stephen Fleming</p>
+                                <p class="text-gray-500 text-sm">Mainland, USA</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end mt-4">
+                            <div class="flex space-x-2">
+                                <button class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-500 transition-colors">
+                                    <i class="bx bx-chevron-left"></i>
+                                </button>
+                                <button class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-500 transition-colors">
+                                    <i class="bx bx-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Element -->
+                    <div class="flex space-x-1 mt-4">
+                        <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                        <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                        <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                        <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                        <div class="w-2 h-2 bg-gray-800 rounded-full"></div>
+                        <div class="w-2 h-2 bg-gray-800 rounded-full"></div>
+                    </div>
+                </div>
+                
+                <!-- BMI Calculator Column -->
+                <div class="reveal" style="transition-delay: 0.3s;">
+                    <div class="bmi-calculator">
+                        <h2 class="text-3xl font-bold mb-6">BMI <span class="text-orange-500">CALCULATOR</span></h2>
+                        <p class="text-gray-400 mb-8">BMI is a reliable guide to estimate the healthy weight range based on height, weight and age.</p>
+                        
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-gray-400 mb-2">Height / cm</label>
+                                <input type="number" class="bmi-input" placeholder="Enter your height">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-400 mb-2">Weight / kg</label>
+                                <input type="number" class="bmi-input" placeholder="Enter your weight">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-400 mb-2">Age</label>
+                                <input type="number" class="bmi-input" placeholder="Enter your age">
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <h3 class="text-xl font-bold text-gray-900">HIIT Workout</h3>
-                                    <p class="text-gray-500">06:00 - 07:00 AM</p>
+                                    <label class="block text-gray-400 mb-2">Gender</label>
+                                    <select class="bmi-input">
+                                        <option>Select gender</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>Other</option>
+                                    </select>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                                    <i class='bx bx-timer text-2xl text-orange-500'></i>
-                                </div>
-                            </div>
-                            <div class="flex items-center mb-4">
-                                <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                                     alt="Trainer"
-                                     class="w-10 h-10 rounded-full object-cover mr-3">
-                                <span class="text-gray-700">Sarah Johnson</span>
-                            </div>
-                            <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                                Book Now <i class='bx bx-right-arrow-alt ml-1'></i>
-                            </a>
-                        </div>
-
-                        <!-- Class 2 -->
-                        <div class="schedule-item p-6 rounded-xl border border-gray-100">
-                            <div class="flex justify-between items-start mb-4">
+                                
                                 <div>
-                                    <h3 class="text-xl font-bold text-gray-900">Yoga Flow</h3>
-                                    <p class="text-gray-500">08:00 - 09:00 AM</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                                    <i class='bx bx-spa text-2xl text-orange-500'></i>
-                                </div>
-                            </div>
-                            <div class="flex items-center mb-4">
-                                <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                                     alt="Trainer"
-                                     class="w-10 h-10 rounded-full object-cover mr-3">
-                                <span class="text-gray-700">Emma Davis</span>
-                            </div>
-                            <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                                Book Now <i class='bx bx-right-arrow-alt ml-1'></i>
-                            </a>
-                        </div>
-
-                        <!-- Class 3 -->
-                        <div class="schedule-item p-6 rounded-xl border border-gray-100">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">Spin Class</h3>
-                                    <p class="text-gray-500">12:00 - 01:00 PM</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                                    <i class='bx bx-cycling text-2xl text-orange-500'></i>
+                                    <label class="block text-gray-400 mb-2">Activity factor</label>
+                                    <select class="bmi-input">
+                                        <option>Select an activity factor</option>
+                                        <option>Sedentary</option>
+                                        <option>Light Exercise</option>
+                                        <option>Moderate Exercise</option>
+                                        <option>Heavy Exercise</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="flex items-center mb-4">
-                                <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                                     alt="Trainer"
-                                     class="w-10 h-10 rounded-full object-cover mr-3">
-                                <span class="text-gray-700">Michael Brown</span>
-                            </div>
-                            <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                                Book Now <i class='bx bx-right-arrow-alt ml-1'></i>
-                            </a>
-                        </div>
-
-                        <!-- Class 4 -->
-                        <div class="schedule-item p-6 rounded-xl border border-gray-100">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">Boxing</h3>
-                                    <p class="text-gray-500">05:30 - 06:30 PM</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                                    <i class='bx bx-boxing text-2xl text-orange-500'></i>
-                                </div>
-                            </div>
-                            <div class="flex items-center mb-4">
-                                <img src="https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                                     alt="Trainer"
-                                     class="w-10 h-10 rounded-full object-cover mr-3">
-                                <span class="text-gray-700">Alex Thompson</span>
-                            </div>
-                            <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                                Book Now <i class='bx bx-right-arrow-alt ml-1'></i>
-                            </a>
-                        </div>
-
-                        <!-- Class 5 -->
-                        <div class="schedule-item p-6 rounded-xl border border-gray-100">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">Pilates</h3>
-                                    <p class="text-gray-500">06:45 - 07:45 PM</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                                    <i class='bx bx-body text-2xl text-orange-500'></i>
-                                </div>
-                            </div>
-                            <div class="flex items-center mb-4">
-                                <img src="https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1376&q=80"
-                                     alt="Trainer"
-                                     class="w-10 h-10 rounded-full object-cover mr-3">
-                                <span class="text-gray-700">Jessica Miller</span>
-                            </div>
-                            <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                                Book Now <i class='bx bx-right-arrow-alt ml-1'></i>
-                            </a>
-                        </div>
-
-                        <!-- Class 6 -->
-                        <div class="schedule-item p-6 rounded-xl border border-gray-100">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900">CrossFit</h3>
-                                    <p class="text-gray-500">08:00 - 09:00 PM</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                                    <i class='bx bx-dumbbell text-2xl text-orange-500'></i>
-                                </div>
-                            </div>
-                            <div class="flex items-center mb-4">
-                                <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                                     alt="Trainer"
-                                     class="w-10 h-10 rounded-full object-cover mr-3">
-                                <span class="text-gray-700">David Wilson</span>
-                            </div>
-                            <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                                Book Now <i class='bx bx-right-arrow-alt ml-1'></i>
-                            </a>
+                            
+                            <button class="calculate-btn">CALCULATE</button>
+                            
+                            <div class="bmi-result text-orange-500">0.0</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Other days would have similar structure but different content -->
-                <div x-show="activeTab === 'tuesday'" class="p-6">
-                    <p class="text-center text-gray-500">Tuesday schedule content would go here</p>
-                </div>
-                <div x-show="activeTab === 'wednesday'" class="p-6">
-                    <p class="text-center text-gray-500">Wednesday schedule content would go here</p>
-                </div>
-                <div x-show="activeTab === 'thursday'" class="p-6">
-                    <p class="text-center text-gray-500">Thursday schedule content would go here</p>
-                </div>
-                <div x-show="activeTab === 'friday'" class="p-6">
-                    <p class="text-center text-gray-500">Friday schedule content would go here</p>
-                </div>
-                <div x-show="activeTab === 'saturday'" class="p-6">
-                    <p class="text-center text-gray-500">Saturday schedule content would go here</p>
-                </div>
-                <div x-show="activeTab === 'sunday'" class="p-6">
-                    <p class="text-center text-gray-500">Sunday schedule content would go here</p>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#" class="btn-3d inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-xl transition-all duration-300">
-                    <span>VIEW FULL SCHEDULE</span>
-                    <i class='bx bx-calendar ml-2 text-xl'></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: Fitness Programs -->
-    <section class="py-24 bg-white relative overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">SPECIALIZED PROGRAMS</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Achieve Your <span class="gradient-text">Fitness Goals</span>
-                </h2>
-                <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Our specialized programs are designed to help you reach specific fitness goals with expert guidance.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Program 1 -->
-                <div class="program-card bg-white shadow-lg reveal">
-                    <div class="program-image">
-                        <img src="https://images.unsplash.com/photo-1616279969856-759f559de54c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="Weight Loss Program"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Weight Loss Program</h3>
-                        <p class="text-gray-600 mb-4">A comprehensive program designed to help you lose weight effectively and sustainably through a combination of cardio, strength training, and nutrition guidance.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-orange-500 font-bold">8 Weeks</span>
-                            <a href="#" class="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Program 2 -->
-                <div class="program-card bg-white shadow-lg reveal" style="transition-delay: 0.2s;">
-                    <div class="program-image">
-                        <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="Muscle Building"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Muscle Building</h3>
-                        <p class="text-gray-600 mb-4">Build lean muscle mass with our specialized program that includes progressive resistance training, proper nutrition, and recovery strategies.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-orange-500 font-bold">12 Weeks</span>
-                            <a href="#" class="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Program 3 -->
-                <div class="program-card bg-white shadow-lg reveal" style="transition-delay: 0.4s;">
-                    <div class="program-image">
-                        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
-                             alt="Functional Fitness"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Functional Fitness</h3>
-                        <p class="text-gray-600 mb-4">Improve your everyday movement patterns and build practical strength with exercises that mimic real-life activities and enhance overall mobility.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-orange-500 font-bold">6 Weeks</span>
-                            <a href="#" class="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#" class="btn-3d inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-xl transition-all duration-300">
-                    <span>EXPLORE ALL PROGRAMS</span>
-                    <i class='bx bx-right-arrow-alt ml-2 text-xl'></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: Meet Our Trainers -->
-    <section class="py-24 bg-gray-50 relative overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">EXPERT TRAINERS</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Meet Our <span class="gradient-text">Professional Trainers</span>
-                </h2>
-                <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Our certified trainers are dedicated to helping you achieve your fitness goals with personalized guidance.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Trainer 1 -->
-                <div class="trainer-card bg-white shadow-lg reveal">
-                    <div class="trainer-image">
-                        <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                             alt="Sarah Johnson"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-1">Sarah Johnson</h3>
-                        <p class="text-orange-500 font-medium mb-3">HIIT Specialist</p>
-                        <p class="text-gray-600 mb-4">Certified personal trainer with 8+ years of experience specializing in high-intensity interval training.</p>
-                        <div class="flex space-x-2">
-                            <a href="#" class="social-icon"><i class='bx bxl-instagram'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-facebook'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-twitter'></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trainer 2 -->
-                <div class="trainer-card bg-white shadow-lg reveal" style="transition-delay: 0.2s;">
-                    <div class="trainer-image">
-                        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="Michael Brown"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-1">Michael Brown</h3>
-                        <p class="text-orange-500 font-medium mb-3">Strength Coach</p>
-                        <p class="text-gray-600 mb-4">Former competitive powerlifter with expertise in strength training and muscle development techniques.</p>
-                        <div class="flex space-x-2">
-                            <a href="#" class="social-icon"><i class='bx bxl-instagram'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-facebook'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-twitter'></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trainer 3 -->
-                <div class="trainer-card bg-white shadow-lg reveal" style="transition-delay: 0.4s;">
-                    <div class="trainer-image">
-                        <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                             alt="Emma Davis"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-1">Emma Davis</h3>
-                        <p class="text-orange-500 font-medium mb-3">Yoga Instructor</p>
-                        <p class="text-gray-600 mb-4">Certified yoga instructor with a holistic approach to fitness, focusing on mind-body connection.</p>
-                        <div class="flex space-x-2">
-                            <a href="#" class="social-icon"><i class='bx bxl-instagram'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-facebook'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-twitter'></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trainer 4 -->
-                <div class="trainer-card bg-white shadow-lg reveal" style="transition-delay: 0.6s;">
-                    <div class="trainer-image">
-                        <img src="https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
-                             alt="Alex Thompson"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-1">Alex Thompson</h3>
-                        <p class="text-orange-500 font-medium mb-3">Boxing Coach</p>
-                        <p class="text-gray-600 mb-4">Former professional boxer with a passion for teaching proper technique and building confidence.</p>
-                        <div class="flex space-x-2">
-                            <a href="#" class="social-icon"><i class='bx bxl-instagram'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-facebook'></i></a>
-                            <a href="#" class="social-icon"><i class='bx bxl-twitter'></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="{{ route('trainers') }}" class="btn-3d inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-xl transition-all duration-300">
-                    <span>MEET ALL TRAINERS</span>
-                    <i class='bx bx-user-voice ml-2 text-xl'></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: Fitness Blog -->
-    <section class="py-24 bg-white relative overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">FITNESS TIPS & ADVICE</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Latest From Our <span class="gradient-text">Fitness Blog</span>
-                </h2>
-                <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Stay informed with the latest fitness trends, nutrition advice, and workout tips from our experts.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Blog Post 1 -->
-                <div class="blog-card bg-white shadow-lg reveal">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
-                             alt="Nutrition Tips"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <span class="bg-orange-100 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full">Nutrition</span>
-                            <span class="text-gray-500 text-sm ml-3">June 15, 2023</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">10 Nutrition Tips for Optimal Workout Recovery</h3>
-                        <p class="text-gray-600 mb-4">Learn how proper nutrition can significantly improve your recovery time and enhance your workout results.</p>
-                        <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                            Read More <i class='bx bx-right-arrow-alt ml-1'></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Blog Post 2 -->
-                <div class="blog-card bg-white shadow-lg reveal" style="transition-delay: 0.2s;">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="HIIT Workouts"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <span class="bg-orange-100 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full">Workouts</span>
-                            <span class="text-gray-500 text-sm ml-3">June 8, 2023</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">5 HIIT Workouts You Can Do in 20 Minutes or Less</h3>
-                        <p class="text-gray-600 mb-4">Short on time? These high-intensity interval training workouts will maximize your results in minimal time.</p>
-                        <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                            Read More <i class='bx bx-right-arrow-alt ml-1'></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Blog Post 3 -->
-                <div class="blog-card bg-white shadow-lg reveal" style="transition-delay: 0.4s;">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1520&q=80"
-                             alt="Mental Health"
-                             class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <span class="bg-orange-100 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full">Wellness</span>
-                            <span class="text-gray-500 text-sm ml-3">June 1, 2023</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">The Connection Between Exercise and Mental Health</h3>
-                        <p class="text-gray-600 mb-4">Discover how regular physical activity can improve your mood, reduce anxiety, and boost overall mental wellbeing.</p>
-                        <a href="#" class="text-orange-500 font-medium hover:text-orange-600 transition-colors flex items-center">
-                            Read More <i class='bx bx-right-arrow-alt ml-1'></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#" class="btn-3d inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full hover:shadow-xl transition-all duration-300">
-                    <span>VIEW ALL ARTICLES</span>
-                    <i class='bx bx-book-open ml-2 text-xl'></i>
-                </a>
             </div>
         </div>
     </section>
 
     <!-- Membership Plans Section -->
-    <section class="py-24 bg-gray-50 relative overflow-hidden">
+    <section class="py-24 bg-white relative overflow-hidden">
         <!-- Decorative Elements -->
-        <div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white to-transparent"></div>
+        <div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-gray-50 to-transparent"></div>
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-20">
                 <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">MEMBERSHIP OPTIONS</span>
                 <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Find Your <span class="gradient-text">Perfect Plan</span>
+                    Choose Your <span class="gradient-text">Membership</span>
                 </h2>
                 <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Choose the membership that fits your lifestyle and helps you achieve your fitness goals.
+                    Select the plan that fits your lifestyle and helps you achieve your fitness goals.
                 </p>
             </div>
 
@@ -1336,79 +1447,6 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="py-24 bg-white relative overflow-hidden">
-        <!-- Decorative Elements -->
-        <div class="absolute top-0 right-0 w-72 h-72 bg-orange-100 rounded-full opacity-50 transform translate-x-1/3 -translate-y-1/3"></div>
-        <div class="absolute bottom-0 left-0 w-72 h-72 bg-orange-100 rounded-full opacity-50 transform -translate-x-1/3 translate-y-1/3"></div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-20">
-                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-3">TESTIMONIALS</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                    Success <span class="gradient-text">Stories</span> from Our Members
-                </h2>
-                <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-                    Hear from the people who have transformed their lives with City Club Gym.
-                </p>
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-10">
-                <!-- Testimonial 1 -->
-                <div class="md:w-1/2 testimonial-card bg-white rounded-3xl shadow-xl p-8 reveal">
-                    <div class="flex items-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="Testimonial 1"
-                             class="w-20 h-20 rounded-full object-cover mr-4 border-4 border-orange-100">
-                        <div>
-                            <h4 class="text-xl font-bold text-gray-900">Michael Thompson</h4>
-                            <p class="text-orange-500">Member for 2 years</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <i class="bx bxs-quote-alt-left text-6xl text-orange-100 absolute -top-6 -left-2"></i>
-                        <p class="text-gray-600 relative z-10 pl-4 text-lg leading-relaxed">
-                            "I've tried many gyms over the years, but City Club is by far the best. The trainers are knowledgeable and supportive, and the equipment is always well-maintained. Since joining, I've lost 30 pounds and gained significant muscle mass. More importantly, I've found a supportive community that keeps me motivated."
-                        </p>
-                        <div class="mt-6 flex">
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="md:w-1/2 testimonial-card bg-white rounded-3xl shadow-xl p-8 reveal" style="transition-delay: 0.2s;">
-                    <div class="flex items-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1488&q=80"
-                             alt="Testimonial 2"
-                             class="w-20 h-20 rounded-full object-cover mr-4 border-4 border-orange-100">
-                        <div>
-                            <h4 class="text-xl font-bold text-gray-900">Jennifer Adams</h4>
-                            <p class="text-orange-500">Member for 1 year</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <i class="bx bxs-quote-alt-left text-6xl text-orange-100 absolute -top-6 -left-2"></i>
-                        <p class="text-gray-600 relative z-10 pl-4 text-lg leading-relaxed">
-                            "The variety of classes at City Club keeps my workout routine exciting and challenging. Sarah's yoga classes have improved my flexibility and reduced my stress levels significantly. The nutrition guidance has completely changed my relationship with food. What I love most is the community here—everyone is so supportive and encouraging!"
-                        </p>
-                        <div class="mt-6 flex">
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                            <i class="bx bxs-star text-yellow-400 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Call to Action Section -->
     <section class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
@@ -1419,7 +1457,7 @@
                             Ready to Start Your Fitness Journey?
                         </h2>
                         <p class="text-lg text-orange-100 mb-8">
-                            Join City Club Gym today and take the first step towards a healthier, stronger you. Our team is ready to support you every step of the way.
+                            Join TrainTogether today and take the first step towards a healthier, stronger you. Our team is ready to support you every step of the way.
                         </p>
                         <div class="flex flex-wrap gap-4">
                             <a href="{{ route('register') }}" class="btn-3d px-8 py-4 bg-white text-orange-600 font-bold rounded-full hover:shadow-xl transition-all duration-300">
@@ -1435,7 +1473,7 @@
                     </div>
                     <div class="md:w-1/2">
                         <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                             alt="Join City Club Gym"
+                             alt="Join TrainTogether"
                              class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -1463,6 +1501,23 @@
 
             window.addEventListener('scroll', revealOnScroll);
             revealOnScroll(); // Trigger on page load
+            
+            // BMI Calculator Functionality
+            const calculateBtn = document.querySelector('.calculate-btn');
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', function() {
+                    const height = parseFloat(document.querySelectorAll('.bmi-input')[0].value) / 100; // convert cm to m
+                    const weight = parseFloat(document.querySelectorAll('.bmi-input')[1].value);
+                    const bmiResult = document.querySelector('.bmi-result');
+                    
+                    if (height && weight) {
+                        const bmi = (weight / (height * height)).toFixed(1);
+                        bmiResult.textContent = bmi;
+                    } else {
+                        bmiResult.textContent = '0.0';
+                    }
+                });
+            }
         });
     </script>
 @endsection
