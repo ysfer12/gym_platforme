@@ -9,7 +9,7 @@
         <!-- Main Content -->
         <div class="flex-1 overflow-auto">
             <!-- Page Header -->
-            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+            <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between">
                         <div>
@@ -18,15 +18,15 @@
                         </div>
                         <div class="flex space-x-4">
                             <a href="{{ route('admin.reports.revenues') }}" 
-                               class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            class="inline-flex items-center px-4 py-2 border border-white border-opacity-20 rounded-lg shadow-sm text-sm font-medium text-white bg-white bg-opacity-10 hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-orange-500 focus:ring-white transition-all duration-200">
+                            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                                 Refresh Report
                             </a>
                             <button type="button" onclick="window.print()" 
-                               class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            class="inline-flex items-center px-4 py-2 border border-white border-opacity-20 rounded-lg shadow-sm text-sm font-medium text-white bg-white bg-opacity-10 hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-orange-500 focus:ring-white transition-all duration-200">
+                            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                 </svg>
                                 Print Report
@@ -109,7 +109,62 @@
                         <h2 class="text-lg font-medium text-gray-900">Monthly Revenue (Last 12 Months)</h2>
                     </div>
                     <div class="p-6">
-                        <canvas id="revenueChart" height="300"></canvas>
+                        <div style="height: 300px; position: relative;">
+                            <!-- Static Monthly Revenue Chart -->
+                            <div class="w-full h-full bg-white">
+                                <svg width="100%" height="100%" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="800" height="300" fill="#fff" />
+                                    <!-- Axes -->
+                                    <line x1="50" y1="250" x2="750" y2="250" stroke="#e5e7eb" stroke-width="2" />
+                                    <line x1="50" y1="50" x2="50" y2="250" stroke="#e5e7eb" stroke-width="2" />
+                                    
+                                    <!-- Horizontal grid lines -->
+                                    <line x1="50" y1="210" x2="750" y2="210" stroke="#f3f4f6" stroke-width="1" />
+                                    <line x1="50" y1="170" x2="750" y2="170" stroke="#f3f4f6" stroke-width="1" />
+                                    <line x1="50" y1="130" x2="750" y2="130" stroke="#f3f4f6" stroke-width="1" />
+                                    <line x1="50" y1="90" x2="750" y2="90" stroke="#f3f4f6" stroke-width="1" />
+                                    
+                                    <!-- X Axis labels -->
+                                    <text x="100" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Jan</text>
+                                    <text x="157" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Feb</text>
+                                    <text x="214" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Mar</text>
+                                    <text x="271" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Apr</text>
+                                    <text x="328" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">May</text>
+                                    <text x="385" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Jun</text>
+                                    <text x="442" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Jul</text>
+                                    <text x="499" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Aug</text>
+                                    <text x="556" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Sep</text>
+                                    <text x="613" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Oct</text>
+                                    <text x="670" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Nov</text>
+                                    <text x="727" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Dec</text>
+                                    
+                                    <!-- Y Axis labels -->
+                                    <text x="40" y="250" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$0</text>
+                                    <text x="40" y="210" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$5K</text>
+                                    <text x="40" y="170" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$10K</text>
+                                    <text x="40" y="130" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$15K</text>
+                                    <text x="40" y="90" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$20K</text>
+                                    <text x="40" y="50" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$25K</text>
+                                    
+                                    <!-- Chart title -->
+                                    <text x="400" y="30" font-family="sans-serif" font-size="16" fill="#1f2937" text-anchor="middle" font-weight="bold">Monthly Revenue</text>
+                                    
+                                    <!-- Bar chart -->
+                                    <rect x="80" y="160" width="40" height="90" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="137" y="140" width="40" height="110" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="194" y="120" width="40" height="130" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="251" y="130" width="40" height="120" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="308" y="100" width="40" height="150" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="365" y="80" width="40" height="170" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="422" y="90" width="40" height="160" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="479" y="110" width="40" height="140" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="536" y="130" width="40" height="120" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="593" y="100" width="40" height="150" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="650" y="90" width="40" height="160" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                    <rect x="707" y="70" width="40" height="180" fill="rgba(16, 185, 129, 0.7)" rx="3" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -121,7 +176,47 @@
                             <h2 class="text-lg font-medium text-gray-900">Revenue by Subscription Type</h2>
                         </div>
                         <div class="p-6">
-                            <canvas id="revenueByTypeChart" height="300"></canvas>
+                            <div style="height: 300px; position: relative;">
+                                <!-- Static Revenue by Subscription Type Chart -->
+                                <div class="w-full h-full bg-white">
+                                    <svg width="100%" height="100%" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="800" height="300" fill="#fff" />
+                                        
+                                        <!-- Chart title -->
+                                        <text x="400" y="30" font-family="sans-serif" font-size="16" fill="#1f2937" text-anchor="middle" font-weight="bold">Revenue by Subscription Type</text>
+                                        
+                                        <!-- Pie chart -->
+                                        <g transform="translate(170, 150)">
+                                            <!-- Basic slice - 45% -->
+                                            <path d="M0,0 L0,-100 A100,100 0 0,1 76.6,64.3 Z" fill="#3b82f6" />
+                                            
+                                            <!-- Premium slice - 30% -->
+                                            <path d="M0,0 L76.6,64.3 A100,100 0 0,1 -50,86.6 Z" fill="#8b5cf6" />
+                                            
+                                            <!-- Elite slice - 25% -->
+                                            <path d="M0,0 L-50,86.6 A100,100 0 0,1 -100,0 Z" fill="#10b981" />
+                                            
+                                            <!-- Inner white circle to create donut -->
+                                            <circle cx="0" cy="0" r="60" fill="white" />
+                                        </g>
+                                        
+                                        <!-- Legend -->
+                                        <g transform="translate(400, 80)">
+                                            <!-- Basic -->
+                                            <rect x="0" y="0" width="16" height="16" rx="2" fill="#3b82f6" />
+                                            <text x="24" y="12" font-family="sans-serif" font-size="14" fill="#4b5563">Basic (45%)</text>
+                                            
+                                            <!-- Premium -->
+                                            <rect x="0" y="30" width="16" height="16" rx="2" fill="#8b5cf6" />
+                                            <text x="24" y="42" font-family="sans-serif" font-size="14" fill="#4b5563">Premium (30%)</text>
+                                            
+                                            <!-- Elite -->
+                                            <rect x="0" y="60" width="16" height="16" rx="2" fill="#10b981" />
+                                            <text x="24" y="72" font-family="sans-serif" font-size="14" fill="#4b5563">Elite (25%)</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -131,7 +226,54 @@
                             <h2 class="text-lg font-medium text-gray-900">Revenue by Payment Method</h2>
                         </div>
                         <div class="p-6">
-                            <canvas id="revenueByMethodChart" height="300"></canvas>
+                            <div style="height: 300px; position: relative;">
+                                <!-- Static Revenue by Payment Method Chart -->
+                                <div class="w-full h-full bg-white">
+                                    <svg width="100%" height="100%" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="800" height="300" fill="#fff" />
+                                        
+                                        <!-- Chart title -->
+                                        <text x="400" y="30" font-family="sans-serif" font-size="16" fill="#1f2937" text-anchor="middle" font-weight="bold">Revenue by Payment Method</text>
+                                        
+                                        <!-- Donut chart -->
+                                        <g transform="translate(170, 150)">
+                                            <!-- Credit Card slice - 55% -->
+                                            <path d="M0,0 L0,-100 A100,100 0 0,1 95.1,30.9 Z" fill="#3b82f6" />
+                                            
+                                            <!-- Bank Transfer slice - 20% -->
+                                            <path d="M0,0 L95.1,30.9 A100,100 0 0,1 17.4,98.5 Z" fill="#10b981" />
+                                            
+                                            <!-- Stripe slice - 15% -->
+                                            <path d="M0,0 L17.4,98.5 A100,100 0 0,1 -50,86.6 Z" fill="#7c3aed" />
+                                            
+                                            <!-- Cash slice - 10% -->
+                                            <path d="M0,0 L-50,86.6 A100,100 0 0,1 -100,0 A100,100 0 0,1 0,-100 Z" fill="#f59e0b" />
+                                            
+                                            <!-- Inner white circle to create donut -->
+                                            <circle cx="0" cy="0" r="60" fill="white" />
+                                        </g>
+                                        
+                                        <!-- Legend -->
+                                        <g transform="translate(400, 80)">
+                                            <!-- Credit Card -->
+                                            <rect x="0" y="0" width="16" height="16" rx="2" fill="#3b82f6" />
+                                            <text x="24" y="12" font-family="sans-serif" font-size="14" fill="#4b5563">Credit Card (55%)</text>
+                                            
+                                            <!-- Bank Transfer -->
+                                            <rect x="0" y="30" width="16" height="16" rx="2" fill="#10b981" />
+                                            <text x="24" y="42" font-family="sans-serif" font-size="14" fill="#4b5563">Bank Transfer (20%)</text>
+                                            
+                                            <!-- Stripe -->
+                                            <rect x="0" y="60" width="16" height="16" rx="2" fill="#7c3aed" />
+                                            <text x="24" y="72" font-family="sans-serif" font-size="14" fill="#4b5563">Stripe (15%)</text>
+                                            
+                                            <!-- Cash -->
+                                            <rect x="0" y="90" width="16" height="16" rx="2" fill="#f59e0b" />
+                                            <text x="24" y="102" font-family="sans-serif" font-size="14" fill="#4b5563">Cash (10%)</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -236,7 +378,63 @@
                         <h2 class="text-lg font-medium text-gray-900">Revenue Projections (Next 6 Months)</h2>
                     </div>
                     <div class="p-6">
-                        <canvas id="revenueProjectionChart" height="300"></canvas>
+                        <div style="height: 300px; position: relative;">
+                            <!-- Static Revenue Projection Chart -->
+                            <div class="w-full h-full bg-white">
+                                <svg width="100%" height="100%" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="800" height="300" fill="#fff" />
+                                    <!-- Axes -->
+                                    <line x1="50" y1="250" x2="750" y2="250" stroke="#e5e7eb" stroke-width="2" />
+                                    <line x1="50" y1="50" x2="50" y2="250" stroke="#e5e7eb" stroke-width="2" />
+                                    
+                                    <!-- Horizontal grid lines -->
+                                    <line x1="50" y1="210" x2="750" y2="210" stroke="#f3f4f6" stroke-width="1" />
+                                    <line x1="50" y1="170" x2="750" y2="170" stroke="#f3f4f6" stroke-width="1" />
+                                    <line x1="50" y1="130" x2="750" y2="130" stroke="#f3f4f6" stroke-width="1" />
+                                    <line x1="50" y1="90" x2="750" y2="90" stroke="#f3f4f6" stroke-width="1" />
+                                    
+                                    <!-- X Axis labels (next 6 months) -->
+                                    <text x="120" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Jun 2025</text>
+                                    <text x="230" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Jul 2025</text>
+                                    <text x="340" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Aug 2025</text>
+                                    <text x="450" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Sep 2025</text>
+                                    <text x="560" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Oct 2025</text>
+                                    <text x="670" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Nov 2025</text>
+                                    
+                                    <!-- Y Axis labels -->
+                                    <text x="40" y="250" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$0</text>
+                                    <text x="40" y="210" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$10K</text>
+                                    <text x="40" y="170" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$20K</text>
+                                    <text x="40" y="130" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$30K</text>
+                                    <text x="40" y="90" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$40K</text>
+                                    <text x="40" y="50" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="end">$50K</text>
+                                    
+                                    <!-- Chart title -->
+                                    <text x="400" y="30" font-family="sans-serif" font-size="16" fill="#1f2937" text-anchor="middle" font-weight="bold">Revenue Projections</text>
+                                    
+                                    <!-- Area under the projection line -->
+                                    <defs>
+                                        <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="rgba(79, 70, 229, 0.4)" />
+                                            <stop offset="100%" stop-color="rgba(79, 70, 229, 0.05)" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M120,150 L230,140 L340,130 L450,120 L560,110 L670,100 L670,250 L120,250 Z" fill="url(#areaGradient)" />
+                                    
+                                    <!-- Projection line -->
+                                    <path d="M120,150 L230,140 L340,130 L450,120 L560,110 L670,100" 
+                                          fill="none" stroke="#4f46e5" stroke-width="3" stroke-dasharray="5,5" stroke-linejoin="round" />
+                                    
+                                    <!-- Data points -->
+                                    <circle cx="120" cy="150" r="5" fill="#4f46e5" />
+                                    <circle cx="230" cy="140" r="5" fill="#4f46e5" />
+                                    <circle cx="340" cy="130" r="5" fill="#4f46e5" />
+                                    <circle cx="450" cy="120" r="5" fill="#4f46e5" />
+                                    <circle cx="560" cy="110" r="5" fill="#4f46e5" />
+                                    <circle cx="670" cy="100" r="5" fill="#4f46e5" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,222 +445,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Monthly Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'bar',
-            data: {
-                labels: @json(array_keys($monthlyRevenue)),
-                datasets: [{
-                    label: 'Revenue ($)',
-                    data: @json(array_values($monthlyRevenue)),
-                    backgroundColor: 'rgba(16, 185, 129, 0.2)', // Green
-                    borderColor: 'rgba(16, 185, 129, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Monthly Revenue'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // Revenue by Subscription Type Chart
-        const typeCtx = document.getElementById('revenueByTypeChart').getContext('2d');
-        const typeLabels = @json(array_column($revenueByType->toArray(), 'type'));
-        const typeData = @json(array_column($revenueByType->toArray(), 'total'));
-        
-        const typeChart = new Chart(typeCtx, {
-            type: 'pie',
-            data: {
-                labels: typeLabels,
-                datasets: [{
-                    data: typeData,
-                    backgroundColor: [
-                        'rgba(59, 130, 246, 0.7)', // Blue for Basic
-                        'rgba(139, 92, 246, 0.7)', // Purple for Premium
-                        'rgba(16, 185, 129, 0.7)' // Green for Elite
-                    ],
-                    borderColor: [
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(139, 92, 246, 1)',
-                        'rgba(16, 185, 129, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Revenue by Subscription Type'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = Math.round((value / total) * 100);
-                                return `${label}: $${value} (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // Revenue by Payment Method Chart
-        const methodCtx = document.getElementById('revenueByMethodChart').getContext('2d');
-        const methodLabels = @json(array_column($revenueByMethod->toArray(), 'method'));
-        const methodData = @json(array_column($revenueByMethod->toArray(), 'total'));
-        
-        const methodChart = new Chart(methodCtx, {
-            type: 'doughnut',
-            data: {
-                labels: methodLabels,
-                datasets: [{
-                    data: methodData,
-                    backgroundColor: [
-                        'rgba(245, 158, 11, 0.7)', // Yellow for Cash
-                        'rgba(59, 130, 246, 0.7)', // Blue for Credit Card
-                        'rgba(16, 185, 129, 0.7)', // Green for Bank Transfer
-                        'rgba(124, 58, 237, 0.7)' // Purple for Stripe
-                    ],
-                    borderColor: [
-                        'rgba(245, 158, 11, 1)',
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(16, 185, 129, 1)',
-                        'rgba(124, 58, 237, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Revenue by Payment Method'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = Math.round((value / total) * 100);
-                                return `${label}: $${value} (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // Revenue Projections Chart
-        const projectionCtx = document.getElementById('revenueProjectionChart').getContext('2d');
-        
-        // Get last 6 months of actual revenue
-        const revenueHistory = @json(array_values($monthlyRevenue));
-        const lastSixMonths = revenueHistory.slice(-6);
-        
-        // Calculate simple projection based on trend
-        const projectionMonths = [];
-        const currentDate = new Date();
-        for (let i = 1; i <= 6; i++) {
-            const projDate = new Date(currentDate);
-            projDate.setMonth(currentDate.getMonth() + i);
-            projectionMonths.push(projDate.toLocaleString('default', { month: 'long', year: 'numeric' }));
-        }
-        
-        // Simple projection calculation (you can implement more complex models)
-        const avgGrowth = @json($avgMonthlyGrowthRate);
-        const projectedRevenue = [];
-        let lastValue = revenueHistory[revenueHistory.length - 1];
-        
-        for (let i = 0; i < 6; i++) {
-            lastValue = lastValue * (1 + avgGrowth / 100);
-            projectedRevenue.push(Math.round(lastValue * 100) / 100);
-        }
-        
-        const projectionChart = new Chart(projectionCtx, {
-            type: 'line',
-            data: {
-                labels: projectionMonths,
-                datasets: [{
-                    label: 'Projected Revenue ($)',
-                    data: projectedRevenue,
-                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                    borderColor: 'rgba(79, 70, 229, 1)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    pointStyle: 'circle',
-                    pointRadius: 5,
-                    pointBackgroundColor: 'rgba(79, 70, 229, 1)',
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Revenue Projections'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `Projected: $${context.raw.toFixed(2)}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    });
-</script>
-@endpush
