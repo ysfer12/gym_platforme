@@ -247,7 +247,26 @@ Route::get('schedule/calendar', [ScheduleController::class, 'calendar'])
         Route::post('/sessions/{session}/book-for-member', [ReceptionistController::class, 'bookForMember'])
             ->name('receptionist.sessions.book-for-member');
         
-        // Attendance management
+
+        
+            Route::post('/attendances/record-entry', [ReceptionistAttendanceController::class, 'recordEntry'])
+    ->name('receptionist.attendances.recordEntry');
+Route::post('/attendances/{attendance}/record-exit', [ReceptionistAttendanceController::class, 'recordExit'])
+    ->name('receptionist.attendances.recordExit');
+        Route::get('/attendances/daily', [ReceptionistAttendanceController::class, 'daily'])
+            ->name('receptionist.attendances.daily');
+        
+        // Record entry/exit for daily attendance - already exist
+        Route::post('/attendances/record-daily-entry', [ReceptionistAttendanceController::class, 'recordDailyEntry'])
+            ->name('receptionist.attendances.recordDailyEntry');
+        Route::post('/attendances/record-daily-exit/{id}', [ReceptionistAttendanceController::class, 'recordDailyExit'])
+            ->name('receptionist.attendances.recordDailyExit');
+        
+        // New routes for creating manual daily attendance
+        Route::get('/attendances/create-daily', [ReceptionistAttendanceController::class, 'showCreateDailyForm'])
+            ->name('receptionist.attendances.create-daily-form');
+        Route::post('/attendances/create-daily', [ReceptionistAttendanceController::class, 'createDailyAttendance'])
+            ->name('receptionist.attendances.create-daily');
         Route::resource('attendances', ReceptionistAttendanceController::class)
             ->names([
                 'index' => 'receptionist.attendances.index',
@@ -258,7 +277,6 @@ Route::get('schedule/calendar', [ScheduleController::class, 'calendar'])
                 'update' => 'receptionist.attendances.update',
                 'destroy' => 'receptionist.attendances.destroy',
             ]);
-        
         // Payment management
         Route::resource('payments', ReceptionistPaymentController::class)
             ->names([
