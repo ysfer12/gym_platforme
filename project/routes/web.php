@@ -147,6 +147,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [TrainerController::class, 'dashboard'])
             ->name('trainer.dashboard');
             
+        // Inside the trainer middleware group
+Route::get('/profile', [TrainerController::class, 'profile'])
+->name('trainer.profile');
+Route::get('/profile/download-badge', [TrainerController::class, 'downloadBadge'])
+->name('trainer.profile.download-badge');
+Route::get('/profile/badge', [TrainerController::class, 'showBadge'])
+->name('trainer.profile.badge');
 
         // Session management
         Route::resource('sessions', SessionController::class)
@@ -172,16 +179,22 @@ Route::middleware('auth')->group(function () {
         Route::post('/attendances/{attendance}/record-exit', [AttendanceController::class, 'recordExit'])
             ->name('trainer.attendances.record-exit');
             
-        // Schedule management
-        Route::resource('schedule', ScheduleController::class)
-            ->names([
-                'index' => 'trainer.schedule.index',
-                'create' => 'trainer.schedule.create',
-                'store' => 'trainer.schedule.store',
-                'edit' => 'trainer.schedule.edit',
-                'update' => 'trainer.schedule.update',
-                'destroy' => 'trainer.schedule.destroy',
-            ]);
+      // Schedule management
+      Route::resource('schedule', ScheduleController::class)
+      ->except(['show'])
+      ->names([
+          'index' => 'trainer.schedule.index',
+          'create' => 'trainer.schedule.create',
+          'store' => 'trainer.schedule.store',
+          'edit' => 'trainer.schedule.edit',
+          'update' => 'trainer.schedule.update',
+          'destroy' => 'trainer.schedule.destroy',
+      ]);
+
+// Add the new calendar route
+Route::get('schedule/calendar', [ScheduleController::class, 'calendar'])
+->name('trainer.schedule.calendar');
+
         
         // Members in trainer's sessions
         Route::get('/members', [TrainerController::class, 'members'])

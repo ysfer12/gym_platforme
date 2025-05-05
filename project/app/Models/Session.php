@@ -24,6 +24,7 @@ class Session extends Model
         'start_time',
         'end_time',
         'trainer_id',
+        'city', // Added city field
     ];
 
     /**

@@ -678,7 +678,7 @@
                         
                         <!-- Main Image with Glass Effect -->
                         <div class="hero-image">
-                            <img src="https://images.unsplash.com/photo-1637666030574-a66e15bf9332?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                            <img src="https://images.unsplash.com/photo-1623874106686-5be2b325c8f1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDl8fGd5bXxlbnwwfHwwfHx8MA%3D%3D"
                                  alt="Fitness Transformation"
                                  class="w-full h-[600px] object-cover">
                         </div>
@@ -1033,7 +1033,7 @@
 
                 <!-- Class 2 -->
                 <div class="class-card reveal" style="transition-delay: 0.2s;">
-                    <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                    <img src="https://plus.unsplash.com/premium_photo-1664109999449-82f58d6f7cf1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zml0bmVzcyUyMGNsYXNzfGVufDB8fDB8fHww" 
                          alt="Fitness Class">
                     <div class="class-type">FITNESS CLASS</div>
                     <div class="class-info">
@@ -1134,7 +1134,7 @@
                         
                         <!-- Step 3 -->
                         <div class="flex flex-col items-center">
-                            <img src="https://images.unsplash.com/photo-1599447292325-2caba821a6a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                            <img src="https://images.unsplash.com/photo-1652363723009-3f2f4d85428e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8THVuZ2V8ZW58MHx8MHx8fDA%3D" 
                                  alt="Lunge Stretch" 
                                  class="rounded-lg mb-2 h-32 w-full object-cover">
                             <div class="workout-step">

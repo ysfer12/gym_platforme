@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Session;
 use Carbon\Carbon;
+use App\Models\TrainerAvailability;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SessionController extends Controller
 {
@@ -31,6 +33,11 @@ class SessionController extends Controller
             $query->where('type', $request->type);
         }
         
+        // Filter by city if provided
+        if ($request->has('city') && $request->city !== 'all') {
+            $query->where('city', $request->city);
+        }
+        
         // Default sorting by date and time
         $query->orderBy('date', 'desc')->orderBy('start_time');
         
@@ -43,9 +50,38 @@ class SessionController extends Controller
             ->distinct()
             ->pluck('type');
             
-        return view('trainer.sessions.index', compact('sessions', 'sessionTypes'));
+        // Get cities for filter dropdown
+        $cities = Session::where('trainer_id', $trainer->id)
+            ->select('city')
+            ->distinct()
+            ->whereNotNull('city')
+            ->pluck('city');
+            
+        // Get trainer's availabilities for the calendar
+        $availabilities = TrainerAvailability::where('trainer_id', $trainer->id)
+            ->orderBy('day_of_week')
+            ->orderBy('start_time')
+            ->get();
+        
+        // Get sessions for the current week for the calendar
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+        
+        $thisWeekSessions = Session::where('trainer_id', $trainer->id)
+            ->whereBetween('date', [$startOfWeek, $endOfWeek])
+            ->get()
+            ->groupBy(function($session) {
+                return Carbon::parse($session->date)->format('Y-m-d');
+            });
+            
+        return view('trainer.sessions.index', compact(
+            'sessions', 
+            'sessionTypes',
+            'cities', 
+            'availabilities',
+            'thisWeekSessions'
+        ));
     }
-
     /**
      * Show the form for creating a new session.
      *
@@ -73,6 +109,7 @@ class SessionController extends Controller
             'date' => 'required|date|after_or_equal:today',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
+            'city' => 'required|string|max:255', // Added city validation
         ]);
         
         $session = new Session();
@@ -85,6 +122,7 @@ class SessionController extends Controller
         $session->start_time = $request->start_time;
         $session->end_time = $request->end_time;
         $session->trainer_id = Auth::id();
+        $session->city = $request->city; // Add city
         $session->save();
         
         return redirect()->route('trainer.sessions.index')
@@ -170,6 +208,7 @@ class SessionController extends Controller
             'date' => 'required|date',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
+            'city' => 'required|string|max:255', // Added city validation
         ]);
         
         $session->title = $request->title;
@@ -180,6 +219,7 @@ class SessionController extends Controller
         $session->date = $request->date;
         $session->start_time = $request->start_time;
         $session->end_time = $request->end_time;
+        $session->city = $request->city; // Update city
         $session->save();
         
         return redirect()->route('trainer.sessions.index')

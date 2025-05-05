@@ -78,6 +78,17 @@
                                     @enderror
                                 </div>
                                 
+                                <!-- City - New field -->
+                                <div>
+                                    <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                                    <input type="text" name="city" id="city" value="{{ old('city', $session->city) }}" required 
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                           placeholder="e.g. New York, Los Angeles">
+                                    @error('city')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                
                                 <!-- Max Capacity - Only increase is allowed if members are registered -->
                                 <div>
                                     <label for="max_capacity" class="block text-sm font-medium text-gray-700">Maximum Capacity</label>

@@ -69,12 +69,23 @@
                                 </select>
                             </div>
                             
+                            <!-- New City Filter -->
+                            <div class="w-full md:w-auto">
+                                <label for="city" class="block text-sm font-medium text-gray-700">Filter by City</label>
+                                <select name="city" id="city" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <option value="all">All Cities</option>
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city }}" {{ request()->city == $city ? 'selected' : '' }}>{{ $city }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
                             <div class="w-full md:w-auto flex items-end">
                                 <button type="submit" class="bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     Filter
                                 </button>
                                 
-                                @if(request()->has('date') || request()->has('type'))
+                                @if(request()->has('date') || request()->has('type') || request()->has('city'))
                                     <a href="{{ route('trainer.sessions.index') }}" class="ml-2 text-sm text-gray-600 hover:text-gray-900">
                                         Clear Filters
                                     </a>
@@ -107,6 +118,9 @@
                                                     Date & Time
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    City
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Attendance
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -133,6 +147,11 @@
                                                         <div class="text-sm text-gray-500">
                                                             {{ \Carbon\Carbon::parse($session->start_time)->format('g:i A') }} - 
                                                             {{ \Carbon\Carbon::parse($session->end_time)->format('g:i A') }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <div class="text-sm text-gray-900">
+                                                            {{ $session->city }}
                                                         </div>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -312,6 +331,9 @@
                                                     </div>
                                                     <div class="text-indigo-600">
                                                         9:00 AM - 10:00 AM
+                                                    </div>
+                                                    <div class="text-indigo-600 text-xs">
+                                                        City: New York
                                                     </div>
                                                 </div>
                                             @endif

@@ -7,6 +7,50 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# Gym Platform Management System
+
+## Project Documentation Structure
+
+### 📁 Documentation/
+- **📋 Cahier des Charges/**
+  - User Stories and Requirements documentation
+  - Project Specifications
+  
+- **🎨 Maquette/**
+  - Desktop Designs
+  - Mobile Designs
+  - Source Files (with prototype)
+  
+- **📊 Conception/**
+  - UML Diagrams
+    - Use Case Diagrams
+    - Class Diagrams
+    
+- **📑 Présentation/**
+  - Project Presentation Materials
+  - Scrum Board Documentation
+
+## Quick Links
+- [Cahier des Charges](./Documentation/CahierDesCharges/README.md)
+- [Conception Diagrams](./Documentation/Conception/)
+- [UI/UX Designs](./Documentation/Maquette/)
+- [Project Presentation](./Documentation/Presentation/)
+
+## Project Overview
+This is a comprehensive gym management platform built with Laravel, designed to streamline gym operations, member management, and training schedules.
+
+## Technologies Used
+- Laravel
+- PHP
+- MySQL
+- Docker
+
+## Getting Started
+[Installation and setup instructions will be here]
+
+## Contributors
+[List of contributors will be here]
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
