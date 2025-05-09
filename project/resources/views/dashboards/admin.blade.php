@@ -482,17 +482,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="{{ route('admin.sessions.create') }}" class="flex items-center justify-between px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
-                                    <div class="flex items-center">
-                                        <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                        <span class="font-medium">Create New Session</span>
-                                    </div>
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
+                             
 
                                 <a href="{{ route('admin.reports.revenues') }}" class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-colors">
                                     <div class="flex items-center">

@@ -9,6 +9,7 @@ use App\Models\Subscription;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -95,12 +96,36 @@ class MemberController extends Controller
     /**
      * Display sessions available for members to book.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function sessions()
+    public function sessions(Request $request)
     {
-        $upcomingSessions = Session::where('date', '>=', Carbon::today())
-            ->orderBy('date')
+        // Start query with basic filter for upcoming sessions
+        $query = Session::where('date', '>=', Carbon::today());
+        
+        // Apply type filter if provided
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+        
+        // Apply level filter if provided
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+        
+        // Apply city filter if provided
+        if ($request->filled('city')) {
+            $query->where('city', $request->city);
+        }
+        
+        // Apply date filter if provided
+        if ($request->filled('date')) {
+            $query->where('date', $request->date);
+        }
+        
+        // Get sorted sessions with pagination
+        $upcomingSessions = $query->orderBy('date')
             ->orderBy('start_time')
             ->paginate(10);
             
@@ -110,7 +135,15 @@ class MemberController extends Controller
             ->pluck('session_id')
             ->toArray();
             
-        return view('member.sessions', compact('upcomingSessions', 'bookedSessionIds'));
+        // Get list of unique cities for the filter dropdown
+        $cities = Session::where('date', '>=', Carbon::today())
+            ->select('city')
+            ->distinct()
+            ->pluck('city')
+            ->filter()
+            ->toArray();
+            
+        return view('member.sessions', compact('upcomingSessions', 'bookedSessionIds', 'cities'));
     }
 
     /**
@@ -134,24 +167,44 @@ class MemberController extends Controller
         }
         
         // Check if user has an active subscription
-        $hasActiveSubscription = Subscription::where('user_id', $user->id)
+        $activeSubscription = Subscription::where('user_id', $user->id)
             ->where('end_date', '>=', Carbon::today())
             ->where('status', 'active')
-            ->exists();
+            ->first();
             
-        if (!$hasActiveSubscription) {
+        if (!$activeSubscription) {
             return redirect()->route('member.subscription')
                 ->with('error', 'You need an active subscription to book sessions.');
         }
         
-        // Create attendance record
-        $session->attendances()->create([
-            'user_id' => $user->id,
-            'date' => $session->date,
-            'check_in_method' => 'online',
-        ]);
+        // If subscription has a session limit, check if user has sessions left
+        if ($activeSubscription->max_sessions_count && $activeSubscription->sessions_left <= 0) {
+            return redirect()->back()->with('error', 'You have used all available sessions in your subscription.');
+        }
         
-        return redirect()->back()->with('success', 'Session booked successfully!');
+        // Create attendance record in a transaction
+        try {
+            DB::beginTransaction();
+            
+            $session->attendances()->create([
+                'user_id' => $user->id,
+                'date' => $session->date,
+                'check_in_method' => 'online',
+            ]);
+            
+            // If subscription has a session limit, decrement sessions_left
+            if ($activeSubscription->max_sessions_count) {
+                $activeSubscription->sessions_left = $activeSubscription->sessions_left - 1;
+                $activeSubscription->save();
+            }
+            
+            DB::commit();
+            
+            return redirect()->back()->with('success', 'Session booked successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An error occurred while booking the session. Please try again.');
+        }
     }
 
     /**

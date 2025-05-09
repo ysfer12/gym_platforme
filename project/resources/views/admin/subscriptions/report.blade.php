@@ -408,11 +408,23 @@
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const chartData = @json($chartData);
         
+        // Debug: Log the chart data to console
+        console.log('Chart Data:', chartData);
+        
+        // Create an array from the chartData object
+        let chartValues = [];
+        for (let i = 1; i <= 12; i++) {
+            chartValues.push(chartData[i] || 0);
+        }
+        
+        // Debug: Log the processed values
+        console.log('Chart Values:', chartValues);
+        
         const revenueData = {
             labels: months,
             datasets: [{
                 label: 'Revenue ($)',
-                data: Object.values(chartData),
+                data: chartValues,
                 backgroundColor: 'rgba(249, 115, 22, 0.2)',
                 borderColor: 'rgba(249, 115, 22, 1)',
                 borderWidth: 2,
@@ -481,12 +493,15 @@
             }
         };
         
+        // Create the revenue chart
         new Chart(revenueCtx, revenueConfig);
         
         // Subscriptions Type Pie Chart
         if (document.getElementById('subscriptionTypeChart')) {
             const typeCtx = document.getElementById('subscriptionTypeChart').getContext('2d');
             const subscriptionTypes = @json($subscriptionsByType);
+            
+            console.log('Subscription Types:', subscriptionTypes);
             
             const typeData = {
                 labels: subscriptionTypes.map(type => type.type + ' Membership'),
@@ -549,6 +564,7 @@
                 }
             };
             
+            // Create the subscription type chart
             new Chart(typeCtx, typeConfig);
         }
         

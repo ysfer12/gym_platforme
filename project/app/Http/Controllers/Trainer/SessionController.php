@@ -4,14 +4,26 @@ namespace App\Http\Controllers\Trainer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Session;
-use Carbon\Carbon;
-use App\Models\TrainerAvailability;
+use App\Services\Interfaces\SessionServiceInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SessionController extends Controller
 {
+    /**
+     * @var SessionServiceInterface
+     */
+    protected $sessionService;
+
+    /**
+     * SessionController constructor.
+     *
+     * @param SessionServiceInterface $sessionService
+     */
+    public function __construct(SessionServiceInterface $sessionService)
+    {
+        $this->sessionService = $sessionService;
+    }
+
     /**
      * Display a listing of the sessions.
      *
@@ -21,67 +33,23 @@ class SessionController extends Controller
     {
         $trainer = Auth::user();
         
-        $query = Session::where('trainer_id', $trainer->id);
-        
-        // Filter by date if provided
-        if ($request->has('date')) {
-            $query->where('date', $request->date);
+        try {
+            // Get filters from request
+            $filters = [
+                'date' => $request->date,
+                'type' => $request->type,
+                'city' => $request->city
+            ];
+            
+            // Get sessions and related data
+            $data = $this->sessionService->getFilteredSessions($trainer->id, $filters);
+            
+            return view('trainer.sessions.index', $data);
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        
-        // Filter by session type if provided
-        if ($request->has('type') && $request->type !== 'all') {
-            $query->where('type', $request->type);
-        }
-        
-        // Filter by city if provided
-        if ($request->has('city') && $request->city !== 'all') {
-            $query->where('city', $request->city);
-        }
-        
-        // Default sorting by date and time
-        $query->orderBy('date', 'desc')->orderBy('start_time');
-        
-        $sessions = $query->withCount('attendances as registered_members')
-            ->paginate(10);
-            
-        // Get session types for filter dropdown
-        $sessionTypes = Session::where('trainer_id', $trainer->id)
-            ->select('type')
-            ->distinct()
-            ->pluck('type');
-            
-        // Get cities for filter dropdown
-        $cities = Session::where('trainer_id', $trainer->id)
-            ->select('city')
-            ->distinct()
-            ->whereNotNull('city')
-            ->pluck('city');
-            
-        // Get trainer's availabilities for the calendar
-        $availabilities = TrainerAvailability::where('trainer_id', $trainer->id)
-            ->orderBy('day_of_week')
-            ->orderBy('start_time')
-            ->get();
-        
-        // Get sessions for the current week for the calendar
-        $startOfWeek = now()->startOfWeek();
-        $endOfWeek = now()->endOfWeek();
-        
-        $thisWeekSessions = Session::where('trainer_id', $trainer->id)
-            ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->get()
-            ->groupBy(function($session) {
-                return Carbon::parse($session->date)->format('Y-m-d');
-            });
-            
-        return view('trainer.sessions.index', compact(
-            'sessions', 
-            'sessionTypes',
-            'cities', 
-            'availabilities',
-            'thisWeekSessions'
-        ));
     }
+    
     /**
      * Show the form for creating a new session.
      *
@@ -100,7 +68,8 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the request
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|string|max:255',
@@ -112,21 +81,15 @@ class SessionController extends Controller
             'city' => 'required|string|max:255', // Added city validation
         ]);
         
-        $session = new Session();
-        $session->title = $request->title;
-        $session->description = $request->description;
-        $session->type = $request->type;
-        $session->level = $request->level;
-        $session->max_capacity = $request->max_capacity;
-        $session->date = $request->date;
-        $session->start_time = $request->start_time;
-        $session->end_time = $request->end_time;
-        $session->trainer_id = Auth::id();
-        $session->city = $request->city; // Add city
-        $session->save();
-        
-        return redirect()->route('trainer.sessions.index')
-            ->with('success', 'Session created successfully!');
+        try {
+            // Create the session
+            $this->sessionService->createSession($validated, Auth::id());
+            
+            return redirect()->route('trainer.sessions.index')
+                ->with('success', 'Session created successfully!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -137,24 +100,15 @@ class SessionController extends Controller
      */
     public function show($id)
     {
-        $session = Session::findOrFail($id);
-        
-        // Verify this session belongs to the trainer
-        if ($session->trainer_id !== Auth::id()) {
+        try {
+            // Get session details
+            $data = $this->sessionService->getSessionDetails($id, Auth::id());
+            
+            return view('trainer.sessions.show', $data);
+        } catch (\Exception $e) {
             return redirect()->route('trainer.sessions.index')
-                ->with('error', 'You are not authorized to view this session');
+                ->with('error', $e->getMessage());
         }
-        
-        // Get attendance count
-        $attendanceCount = $session->attendances()->count();
-        
-        // Get members who have registered for this session
-        $members = $session->attendances()->with('user')->get();
-        
-        // Calculate available spots
-        $availableSpots = $session->max_capacity - $attendanceCount;
-        
-        return view('trainer.sessions.show', compact('session', 'attendanceCount', 'members', 'availableSpots'));
     }
 
     /**
@@ -165,15 +119,18 @@ class SessionController extends Controller
      */
     public function edit($id)
     {
-        $session = Session::findOrFail($id);
-        
-        // Verify this session belongs to the trainer
-        if ($session->trainer_id !== Auth::id()) {
+        try {
+            // Get session details
+            $data = $this->sessionService->getSessionDetails($id, Auth::id());
+            
+            // Extract session from data
+            $session = $data['session'];
+            
+            return view('trainer.sessions.edit', compact('session'));
+        } catch (\Exception $e) {
             return redirect()->route('trainer.sessions.index')
-                ->with('error', 'You are not authorized to edit this session');
+                ->with('error', $e->getMessage());
         }
-        
-        return view('trainer.sessions.edit', compact('session'));
     }
 
     /**
@@ -185,78 +142,46 @@ class SessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $session = Session::findOrFail($id);
-        
-        // Verify this session belongs to the trainer
-        if ($session->trainer_id !== Auth::id()) {
+        try {
+            // Get session details for validation
+            $data = $this->sessionService->getSessionDetails($id, Auth::id());
+            $attendanceCount = $data['attendanceCount'];
+            
+            // Validate the request
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'type' => 'required|string|max:255',
+                'level' => 'required|string|in:Beginner,Intermediate,Advanced',
+                'max_capacity' => 'required|integer|min:' . $attendanceCount,
+                'date' => 'required|date',
+                'start_time' => 'required',
+                'end_time' => 'required|after:start_time',
+                'city' => 'required|string|max:255', // Added city validation
+            ]);
+            
+            // Update the session
+            $this->sessionService->updateSession($id, $validated, Auth::id());
+            
             return redirect()->route('trainer.sessions.index')
-                ->with('error', 'You are not authorized to update this session');
+                ->with('success', 'Session updated successfully!');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', $e->getMessage());
         }
-        
-        // Check if session is in the past
-        if (Carbon::parse($session->date)->isPast()) {
-            return redirect()->route('trainer.sessions.index')
-                ->with('error', 'Past sessions cannot be modified');
-        }
-        
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type' => 'required|string|max:255',
-            'level' => 'required|string|in:Beginner,Intermediate,Advanced',
-            'max_capacity' => 'required|integer|min:' . $session->attendances()->count(),
-            'date' => 'required|date',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
-            'city' => 'required|string|max:255', // Added city validation
-        ]);
-        
-        $session->title = $request->title;
-        $session->description = $request->description;
-        $session->type = $request->type;
-        $session->level = $request->level;
-        $session->max_capacity = $request->max_capacity;
-        $session->date = $request->date;
-        $session->start_time = $request->start_time;
-        $session->end_time = $request->end_time;
-        $session->city = $request->city; // Update city
-        $session->save();
-        
-        return redirect()->route('trainer.sessions.index')
-            ->with('success', 'Session updated successfully!');
     }
 
-    /**
-     * Remove the specified session from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        $session = Session::findOrFail($id);
-        
-        // Verify this session belongs to the trainer
-        if ($session->trainer_id !== Auth::id()) {
+        try {
+            // Delete the session
+            $this->sessionService->deleteSession($id, Auth::id());
+            
             return redirect()->route('trainer.sessions.index')
-                ->with('error', 'You are not authorized to delete this session');
-        }
-        
-        // Check if session is in the past
-        if (Carbon::parse($session->date)->isPast()) {
+                ->with('success', 'Session deleted successfully!');
+        } catch (\Exception $e) {
             return redirect()->route('trainer.sessions.index')
-                ->with('error', 'Past sessions cannot be deleted');
+                ->with('error', $e->getMessage());
         }
-        
-        // Check if anyone has registered for this session
-        if ($session->attendances()->count() > 0) {
-            return redirect()->route('trainer.sessions.index')
-                ->with('error', 'Cannot delete a session that has registered members');
-        }
-        
-        $session->delete();
-        
-        return redirect()->route('trainer.sessions.index')
-            ->with('success', 'Session deleted successfully!');
     }
 }

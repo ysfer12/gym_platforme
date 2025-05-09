@@ -197,56 +197,59 @@ class PaymentController extends Controller
             ->with('success', 'Payment refunded successfully.');
     }
     
-    /**
-     * Generate payment report.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function report()
-    {
-        // Date range defaults
-        $startDate = request('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
-        $endDate = request('end_date', Carbon::now()->format('Y-m-d'));
+/**
+ * Generate payment report.
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function report()
+{
+    // Date range defaults
+    $startDate = request('start_date') 
+        ? \Carbon\Carbon::parse(request('start_date')) 
+        : \Carbon\Carbon::now()->startOfMonth();
+    $endDate = request('end_date') 
+        ? \Carbon\Carbon::parse(request('end_date')) 
+        : \Carbon\Carbon::now();
+    
+    $payments = Payment::with('subscription.user')
+        ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->get();
         
-        $payments = Payment::with('subscription.user')
-            ->whereBetween('date', [$startDate, $endDate])
-            ->get();
-            
-        $totalRevenue = $payments->where('status', 'paid')->sum('amount');
-        $pendingRevenue = $payments->where('status', 'pending')->sum('amount');
-        $refundedRevenue = $payments->where('status', 'refunded')->sum('amount');
-        
-        // Group by payment method
-        $paymentsByMethod = $payments->where('status', 'paid')->groupBy('method')
-            ->map(function ($group) {
-                return [
-                    'count' => $group->count(),
-                    'total' => $group->sum('amount')
-                ];
-            });
-            
-        // Group by day
-        $paymentsByDay = $payments->where('status', 'paid')->groupBy(function($item) {
-            return Carbon::parse($item->date)->format('Y-m-d');
-        })->map(function ($group) {
+    $totalRevenue = $payments->where('status', 'paid')->sum('amount');
+    $pendingRevenue = $payments->where('status', 'pending')->sum('amount');
+    $refundedRevenue = $payments->where('status', 'refunded')->sum('amount');
+    
+    // Group by payment method
+    $paymentsByMethod = $payments->where('status', 'paid')->groupBy('method')
+        ->map(function ($group) {
             return [
                 'count' => $group->count(),
                 'total' => $group->sum('amount')
             ];
         });
         
-        return view('admin.payments.report', compact(
-            'payments',
-            'startDate',
-            'endDate',
-            'totalRevenue',
-            'pendingRevenue',
-            'refundedRevenue',
-            'paymentsByMethod',
-            'paymentsByDay'
-        ));
-    }
+    // Group by day
+    $paymentsByDay = $payments->where('status', 'paid')->groupBy(function($item) {
+        return \Carbon\Carbon::parse($item->date)->format('Y-m-d');
+    })->map(function ($group) {
+        return [
+            'count' => $group->count(),
+            'total' => $group->sum('amount')
+        ];
+    });
     
+    return view('admin.payments.report', compact(
+        'payments',
+        'startDate',
+        'endDate',
+        'totalRevenue',
+        'pendingRevenue',
+        'refundedRevenue',
+        'paymentsByMethod',
+        'paymentsByDay'
+    ));
+}    
     /**
      * Get monthly revenue data for the last 12 months.
      *

@@ -36,10 +36,10 @@ class SubscriptionConfirmation extends Mailable
      */
     public function build()
     {
-        $subject = 'FitTrack Gym - Subscription Confirmation';
+        $subject = 'TrainTogether Gym - Subscription Confirmation';
         
         if ($this->subscription->status === 'pending') {
-            $subject = 'FitTrack Gym - Pending Subscription';
+            $subject = 'TrainTogether Gym - Pending Subscription';
         }
         
         return $this->subject($subject)

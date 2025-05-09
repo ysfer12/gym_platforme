@@ -12,6 +12,7 @@
             body {
                 margin: 0;
                 padding: 0;
+                background-color: white !important;
             }
             .no-print {
                 display: none !important;
@@ -24,7 +25,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
+            background: linear-gradient(to bottom, #111827, #1f2937);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -32,6 +33,7 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            color: #e5e7eb;
         }
 
         .badge-container {
@@ -42,14 +44,15 @@
             background: linear-gradient(to right, 
                 {{ $experienceLevel['badge'] == 'gold' ? '#F59E0B, #D97706' : 
                    ($experienceLevel['badge'] == 'silver' ? '#9CA3AF, #6B7280' : 
-                   ($experienceLevel['badge'] == 'bronze' ? '#92400E, #78350F' : '#E5E7EB, #D1D5DB')) }});
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                   ($experienceLevel['badge'] == 'bronze' ? '#92400E, #78350F' : '#4B5563, #374151')) }});
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #4B5563;
         }
 
         .badge-inner {
             height: 100%;
             width: 100%;
-            background-color: white;
+            background-color: #111827;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -59,25 +62,29 @@
         }
 
         .badge-header {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 24px;
             font-weight: bold;
-            color: #4F46E5;
-            background: linear-gradient(to right, #4F46E5, #3B82F6);
+            background: linear-gradient(to right, #fb923c, #f97316);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+        
+        .badge-header span {
+            -webkit-text-fill-color: white;
         }
 
         .qr-container {
             width: 180px;
             height: 180px;
-            margin: 12px 0;
+            margin: 16px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 5px;
+            padding: 8px;
             background-color: white;
+            border-radius: 8px;
         }
 
         .trainer-info {
@@ -88,62 +95,62 @@
         .trainer-name {
             font-size: 20px;
             font-weight: bold;
-            color: #1F2937;
-            margin-bottom: 4px;
+            color: #e5e7eb;
+            margin-bottom: 8px;
         }
 
         .trainer-level {
             display: inline-block;
             padding: 4px 10px;
-            background-color: #EEF2FF;
-            color: #4F46E5;
+            background-color: #064e3b;
+            color: #10b981;
             border-radius: 9999px;
             font-size: 12px;
             font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .trainer-email {
-            color: #6B7280;
-            font-size: 14px;
             margin-bottom: 12px;
         }
 
+        .trainer-email {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
         .specialties {
-            margin-top: 12px;
+            margin-top: 16px;
         }
 
         .specialties-title {
             font-size: 12px;
-            color: #6B7280;
+            color: #9ca3af;
         }
 
         .specialties-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 4px;
-            margin-top: 4px;
+            gap: 6px;
+            margin-top: 8px;
         }
 
         .specialty {
-            background-color: #F3F4F6;
-            color: #4B5563;
+            background-color: #1f2937;
+            color: #d1d5db;
             border-radius: 9999px;
-            padding: 2px 8px;
+            padding: 3px 10px;
             font-size: 11px;
             font-weight: 500;
         }
 
         .trainer-footer {
-            margin-top: 16px;
+            margin-top: 20px;
             font-size: 11px;
-            color: #6B7280;
+            color: #9ca3af;
             text-align: center;
         }
 
         .button-container {
-            margin-top: 24px;
+            margin-top: 32px;
             display: flex;
             gap: 12px;
             justify-content: center;
@@ -151,7 +158,7 @@
 
         .btn {
             padding: 10px 20px;
-            background-color: #4F46E5;
+            background-color: #16a34a;
             color: white;
             border: none;
             border-radius: 6px;
@@ -162,17 +169,32 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s ease;
         }
 
         .btn:hover {
-            background-color: #4338CA;
+            background-color: #15803d;
+            transform: translateY(-1px);
+        }
+        
+        .brand-text {
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .brand-text-colored {
+            background: linear-gradient(to right, #fb923c, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
 <body>
     <div class="badge-container" id="badge">
         <div class="badge-inner">
-            <div class="badge-header">FitTrack Gym</div>
+            <div class="badge-header">
+                <span class="brand-text-colored">Train</span><span>Together</span>
+            </div>
             
             <!-- QR code will be placed here -->
             <div class="qr-container" id="qrcode"></div>
@@ -252,6 +274,9 @@
                 if (qrImage) {
                     qrImage.style.width = '180px';
                     qrImage.style.height = '180px';
+                    qrImage.style.display = 'block';
+                    // Set QR code color to green
+                    qrImage.style.filter = 'hue-rotate(100deg)'; // Apply a green hue
                 }
             }
             
@@ -268,17 +293,17 @@
                 const badge = document.getElementById('badge');
                 
                 // Show a loading state
-                this.textContent = 'Generating...';
+                this.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
                 
                 // Use dom-to-image instead of html2canvas
                 domtoimage.toPng(badge, { 
                     quality: 0.95,
-                    bgcolor: '#fff',
+                    bgcolor: '#111827',
                     width: badge.offsetWidth,
                     height: badge.offsetHeight,
                     style: {
                         'border-radius': '12px',
-                        'box-shadow': '0 10px 25px rgba(0, 0, 0, 0.1)'
+                        'box-shadow': '0 10px 25px rgba(0, 0, 0, 0.5)'
                     }
                 })
                 .then(function(dataUrl) {

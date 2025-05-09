@@ -277,6 +277,7 @@ Route::post('/attendances/{attendance}/record-exit', [ReceptionistAttendanceCont
                 'update' => 'receptionist.attendances.update',
                 'destroy' => 'receptionist.attendances.destroy',
             ]);
+            
         // Payment management
         Route::resource('payments', ReceptionistPaymentController::class)
             ->names([
@@ -301,11 +302,7 @@ Route::post('/attendances/{attendance}/record-exit', [ReceptionistAttendanceCont
             ->name('receptionist.trainers');
         Route::get('/trainers/{id}', [ReceptionistController::class, 'trainerDetails'])
             ->name('receptionist.trainers.show');
-            // Batch payment routes
-Route::get('/payments/batch', [PaymentController::class, 'batchCreate'])->name('receptionist.payments.batch');
-Route::post('/payments/batch', [PaymentController::class, 'batchStore'])->name('receptionist.payments.batch.store');
-Route::get('/payments/search', [PaymentController::class, 'search'])->name('receptionist.payments.search');
-        // Add these routes inside your receptionist middleware group
+               // Add these routes inside your receptionist middleware group
 Route::get('/members/create', [ReceptionistController::class, 'createMember'])->name('receptionist.members.create');
 Route::post('/members', [ReceptionistController::class, 'storeMember'])->name('receptionist.members.store');
 Route::get('payments/{payment}/receipt', [ReceptionistPaymentController::class, 'generateReceipt'])
@@ -374,7 +371,12 @@ Route::get('payments/{payment}/email-receipt', [ReceptionistPaymentController::c
         Route::post('/sessions/{session}/cancel', [AdminSessionController::class, 'cancel'])
             ->name('admin.sessions.cancel');
         
-        // Subscription management
+            Route::get('/subscriptions/report', [AdminSubscriptionController::class, 'report'])
+            ->name('admin.subscriptions.report');
+        Route::get('/subscriptions/export', [AdminSubscriptionController::class, 'export'])
+            ->name('admin.subscriptions.export');
+        
+        // Then define your resource routes
         Route::resource('subscriptions', AdminSubscriptionController::class)
             ->names([
                 'index' => 'admin.subscriptions.index',
@@ -391,11 +393,7 @@ Route::get('payments/{payment}/email-receipt', [ReceptionistPaymentController::c
             ->name('admin.subscriptions.renew');
         Route::post('/subscriptions/{subscription}/cancel', [AdminSubscriptionController::class, 'cancel'])
             ->name('admin.subscriptions.cancel');
-        Route::get('/subscriptions/report', [AdminSubscriptionController::class, 'report'])
-            ->name('admin.subscriptions.report');
-        Route::get('/subscriptions/export', [AdminSubscriptionController::class, 'export'])
-            ->name('admin.subscriptions.export');
-        
+            
         // Attendance management
         Route::resource('attendances', AdminAttendanceController::class)
             ->names([
@@ -418,6 +416,8 @@ Route::get('payments/{payment}/email-receipt', [ReceptionistPaymentController::c
         Route::get('/attendances/report', [AdminAttendanceController::class, 'report'])
             ->name('admin.attendances.report');
         
+            Route::get('/payments/report', [AdminPaymentController::class, 'report'])
+            ->name('admin.payments.report');
         // Payment management
         Route::resource('payments', AdminPaymentController::class)
             ->names([
@@ -437,7 +437,6 @@ Route::get('payments/{payment}/email-receipt', [ReceptionistPaymentController::c
             ->name('admin.payments.refund');
         Route::get('/payments/{payment}/receipt', [AdminPaymentController::class, 'generateReceipt'])
             ->name('admin.payments.receipt');
-        Route::get('/payments/report', [AdminPaymentController::class, 'report'])
-            ->name('admin.payments.report');
+
     });
 });

@@ -4,15 +4,26 @@ namespace App\Http\Controllers\Trainer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TrainerAvailability;
-use App\Models\Session;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Services\Interfaces\ScheduleServiceInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
+    /**
+     * @var ScheduleServiceInterface
+     */
+    protected $scheduleService;
+
+    /**
+     * ScheduleController constructor.
+     *
+     * @param ScheduleServiceInterface $scheduleService
+     */
+    public function __construct(ScheduleServiceInterface $scheduleService)
+    {
+        $this->scheduleService = $scheduleService;
+    }
+
     /**
      * Display the trainer's availability schedule.
      *
@@ -21,12 +32,14 @@ class ScheduleController extends Controller
     public function index()
     {
         $trainer = Auth::user();
-        $availabilities = TrainerAvailability::where('trainer_id', $trainer->id)
-            ->orderBy('day_of_week')
-            ->orderBy('start_time')
-            ->get();
-            
-        return view('trainer.schedule.index', compact('availabilities'));
+        
+        $result = $this->scheduleService->getTrainerAvailabilities($trainer->id);
+        
+        if (!$result['success']) {
+            return back()->with('error', $result['message']);
+        }
+        
+        return view('trainer.schedule.index', ['availabilities' => $result['availabilities']]);
     }
 
     /**
@@ -47,44 +60,26 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'day_of_week' => 'required|integer|between:0,6',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'is_available' => 'boolean',
         ]);
         
-        // Convert time strings to Carbon objects for comparison
-        $startTime = Carbon::parse($request->start_time);
-        $endTime = Carbon::parse($request->end_time);
+        // Set is_available to true if checkbox is checked, false otherwise
+        $validated['is_available'] = $request->has('is_available');
         
-        // Check if the new availability overlaps with any existing ones
-        $existingAvailabilities = TrainerAvailability::where('trainer_id', Auth::id())
-            ->where('day_of_week', $request->day_of_week)
-            ->get();
-        
-        foreach ($existingAvailabilities as $existing) {
-            $existingStart = Carbon::parse($existing->start_time);
-            $existingEnd = Carbon::parse($existing->end_time);
+        try {
+            $this->scheduleService->createAvailability($validated, Auth::id());
             
-            if ($startTime < $existingEnd && $endTime > $existingStart) {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('error', 'This time slot overlaps with an existing availability slot.');
-            }
+            return redirect()->route('trainer.schedule.index')
+                ->with('success', 'Availability added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->getMessage());
         }
-        
-        // Create the new availability slot
-        TrainerAvailability::create([
-            'trainer_id' => Auth::id(),
-            'day_of_week' => $request->day_of_week,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'is_available' => $request->has('is_available'),
-        ]);
-        
-        return redirect()->route('trainer.schedule.index')
-            ->with('success', 'Availability added successfully');
     }
 
     /**
@@ -95,15 +90,32 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-        $availability = TrainerAvailability::findOrFail($id);
-        
-        // Verify this availability belongs to the trainer
-        if ($availability->trainer_id !== Auth::id()) {
+        try {
+            $result = $this->scheduleService->getTrainerAvailabilities(Auth::id());
+            
+            if (!$result['success']) {
+                return back()->with('error', $result['message']);
+            }
+            
+            // Find the specific availability from the result
+            $availability = null;
+            foreach ($result['availabilities'] as $avail) {
+                if ($avail->id == $id) {
+                    $availability = $avail;
+                    break;
+                }
+            }
+            
+            if (!$availability) {
+                return redirect()->route('trainer.schedule.index')
+                    ->with('error', 'Availability not found');
+            }
+            
+            return view('trainer.schedule.edit', compact('availability'));
+        } catch (\Exception $e) {
             return redirect()->route('trainer.schedule.index')
-                ->with('error', 'You are not authorized to edit this availability');
+                ->with('error', $e->getMessage());
         }
-        
-        return view('trainer.schedule.edit', compact('availability'));
     }
 
     /**
@@ -115,76 +127,26 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $availability = TrainerAvailability::findOrFail($id);
-        
-        // Verify this availability belongs to the trainer
-        if ($availability->trainer_id !== Auth::id()) {
-            return redirect()->route('trainer.schedule.index')
-                ->with('error', 'You are not authorized to update this availability');
-        }
-        
-        $request->validate([
+        $validated = $request->validate([
             'day_of_week' => 'required|integer|between:0,6',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'is_available' => 'boolean',
         ]);
         
-        // Convert time strings to Carbon objects for comparison
-        $startTime = Carbon::parse($request->start_time);
-        $endTime = Carbon::parse($request->end_time);
+        // Set is_available to true if checkbox is checked, false otherwise
+        $validated['is_available'] = $request->has('is_available');
         
-        // Check if the updated availability overlaps with any existing ones
-        $existingAvailabilities = TrainerAvailability::where('trainer_id', Auth::id())
-            ->where('day_of_week', $request->day_of_week)
-            ->where('id', '!=', $id) // Exclude current availability
-            ->get();
-        
-        foreach ($existingAvailabilities as $existing) {
-            $existingStart = Carbon::parse($existing->start_time);
-            $existingEnd = Carbon::parse($existing->end_time);
+        try {
+            $this->scheduleService->updateAvailability($id, $validated, Auth::id());
             
-            if ($startTime < $existingEnd && $endTime > $existingStart) {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('error', 'This time slot overlaps with an existing availability slot.');
-            }
+            return redirect()->route('trainer.schedule.index')
+                ->with('success', 'Availability updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->getMessage());
         }
-        
-        // Check if there are any sessions scheduled during this time slot
-        // Get the day of week from the availability
-        $dayOfWeek = $request->day_of_week;
-        
-        // Get sessions for this trainer on this day of week
-        $sessions = Session::where('trainer_id', Auth::id())
-            ->where(DB::raw('DAYOFWEEK(date)'), '=', $dayOfWeek + 1) // MySQL's DAYOFWEEK starts from 1 (Sunday)
-            ->where('date', '>=', now()->format('Y-m-d')) // Only check future sessions
-            ->get();
-        
-        foreach ($sessions as $session) {
-            $sessionStart = Carbon::parse($session->start_time);
-            $sessionEnd = Carbon::parse($session->end_time);
-            
-            if ($startTime <= $sessionEnd && $endTime >= $sessionStart) {
-                // If the trainer is marking themselves as unavailable, warn about existing sessions
-                if (!$request->has('is_available')) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'You have sessions scheduled during this time slot. Please reschedule them before marking yourself as unavailable.');
-                }
-            }
-        }
-        
-        // Update the availability
-        $availability->update([
-            'day_of_week' => $request->day_of_week,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'is_available' => $request->has('is_available'),
-        ]);
-        
-        return redirect()->route('trainer.schedule.index')
-            ->with('success', 'Availability updated successfully');
     }
 
     /**
@@ -195,40 +157,15 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        $availability = TrainerAvailability::findOrFail($id);
-        
-        // Verify this availability belongs to the trainer
-        if ($availability->trainer_id !== Auth::id()) {
+        try {
+            $this->scheduleService->deleteAvailability($id, Auth::id());
+            
             return redirect()->route('trainer.schedule.index')
-                ->with('error', 'You are not authorized to delete this availability');
+                ->with('success', 'Availability deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('trainer.schedule.index')
+                ->with('error', $e->getMessage());
         }
-        
-        // Check if there are any sessions scheduled during this time slot
-        $dayOfWeek = $availability->day_of_week;
-        
-        // Get sessions for this trainer on this day of week
-        $sessions = Session::where('trainer_id', Auth::id())
-            ->where(DB::raw('DAYOFWEEK(date)'), '=', $dayOfWeek + 1)
-            ->where('date', '>=', now()->format('Y-m-d')) // Only check future sessions
-            ->get();
-        
-        foreach ($sessions as $session) {
-            $sessionStart = Carbon::parse($session->start_time);
-            $sessionEnd = Carbon::parse($session->end_time);
-            
-            $availabilityStart = Carbon::parse($availability->start_time);
-            $availabilityEnd = Carbon::parse($availability->end_time);
-            
-            if ($availabilityStart <= $sessionEnd && $availabilityEnd >= $sessionStart) {
-                return redirect()->route('trainer.schedule.index')
-                    ->with('error', 'You have sessions scheduled during this time slot. Please reschedule them before deleting this availability.');
-            }
-        }
-        
-        $availability->delete();
-        
-        return redirect()->route('trainer.schedule.index')
-            ->with('success', 'Availability deleted successfully');
     }
     
     /**
@@ -240,67 +177,15 @@ class ScheduleController extends Controller
     {
         $trainer = Auth::user();
         
-        // Get all availabilities
-        $availabilities = TrainerAvailability::where('trainer_id', $trainer->id)
-            ->orderBy('day_of_week')
-            ->orderBy('start_time')
-            ->get();
+        $result = $this->scheduleService->getCalendarData($trainer->id);
         
-        // Get upcoming sessions for the next 4 weeks
-        $startDate = now()->startOfWeek();
-        $endDate = now()->addWeeks(4)->endOfWeek();
-        
-        $sessions = Session::where('trainer_id', $trainer->id)
-            ->whereBetween('date', [$startDate, $endDate])
-            ->with('attendances')
-            ->orderBy('date')
-            ->orderBy('start_time')
-            ->get();
-        
-        // Group sessions by date for easier rendering
-        $sessionsByDate = [];
-        foreach ($sessions as $session) {
-            $date = $session->date->format('Y-m-d');
-            if (!isset($sessionsByDate[$date])) {
-                $sessionsByDate[$date] = [];
-            }
-            $sessionsByDate[$date][] = $session;
+        if (!$result['success']) {
+            return back()->with('error', $result['message']);
         }
         
-        // Generate calendar weeks
-        $weeks = [];
-        $currentDate = $startDate->copy();
-        
-        while ($currentDate <= $endDate) {
-            $week = [];
-            for ($i = 0; $i < 7; $i++) {
-                $week[] = [
-                    'date' => $currentDate->copy(),
-                    'sessions' => $sessionsByDate[$currentDate->format('Y-m-d')] ?? [],
-                    'isAvailable' => $this->isDayAvailable($availabilities, $currentDate->dayOfWeek),
-                ];
-                $currentDate->addDay();
-            }
-            $weeks[] = $week;
-        }
-        
-        return view('trainer.schedule.calendar', compact('weeks', 'availabilities'));
-    }
-    
-    /**
-     * Check if a specific day has any availability slots.
-     *
-     * @param  \Illuminate\Database\Eloquent\Collection  $availabilities
-     * @param  int  $dayOfWeek
-     * @return bool
-     */
-    private function isDayAvailable($availabilities, $dayOfWeek)
-    {
-        foreach ($availabilities as $availability) {
-            if ($availability->day_of_week == $dayOfWeek && $availability->is_available) {
-                return true;
-            }
-        }
-        return false;
+        return view('trainer.schedule.calendar', [
+            'weeks' => $result['weeks'],
+            'availabilities' => $result['availabilities']
+        ]);
     }
 }

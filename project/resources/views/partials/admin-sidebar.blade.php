@@ -86,13 +86,7 @@
                         Payments & Revenue
                     </a>
 
-                    <!-- Attendance Link with Enhanced Icon -->
-                    <a href="{{ route('admin.attendances.index') }}" class="{{ request()->routeIs('admin.attendances*') ? 'bg-orange-600 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200">
-                        <svg class="mr-3 flex-shrink-0 h-6 w-6 {{ request()->routeIs('admin.attendances*') ? 'text-orange-300' : 'text-gray-400 group-hover:text-gray-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                        Gym Attendance
-                    </a>
+                  
 
                     <!-- Reports Section Heading -->
                     <div class="px-2 mt-5 mb-2">

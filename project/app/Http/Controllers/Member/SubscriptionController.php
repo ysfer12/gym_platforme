@@ -109,10 +109,10 @@ class SubscriptionController extends Controller
             
             // Apply any discounts for longer durations
             if ($duration >= 3) {
-                $price = $price * 0.95; // 5% discount for 3+ months
+                $price = $price * 0.95; 
             }
             if ($duration >= 6) {
-                $price = $price * 0.9; // Additional 10% discount for 6+ months
+                $price = $price * 0.9; 
             }
             
             // Format price for Stripe (in cents)
@@ -152,8 +152,7 @@ class SubscriptionController extends Controller
             }
         }
         
-        // For cash payment
-        // For cash payment
+
 if ($paymentMethod === 'cash') {
     try {
         // Calculate the price based on the plan
@@ -202,7 +201,7 @@ if ($paymentMethod === 'cash') {
             $sessionsCount = [
                 'Basic' => 4 * $duration,
                 'Standard' => 8 * $duration,
-                'Premium' => 999, // Unlimited
+                'Premium' => 999, 
             ][$plan] ?? 0;
             
             // Set trainer zone access based on the plan
@@ -216,7 +215,7 @@ $subscription->duration = $duration;
 $subscription->price = $price;
 $subscription->start_date = $startDate;
 $subscription->end_date = $endDate;
-$subscription->status = 'pending'; // Correctly set to 'pending'
+$subscription->status = 'pending'; 
 $subscription->payment_method = 'cash';
 $subscription->max_sessions_count = $sessionsCount;
 $subscription->sessions_left = $sessionsCount;

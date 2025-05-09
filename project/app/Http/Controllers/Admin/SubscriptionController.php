@@ -280,60 +280,59 @@ class SubscriptionController extends Controller
             ->with('success', 'Subscription cancelled successfully.');
     }
     
-    /**
-     * Generate subscription report.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function report(Request $request)
-    {
-        // Get subscription statistics
-        $stats = [
-            'total' => Subscription::count(),
-            'active' => Subscription::where('status', 'active')
-                ->where('end_date', '>=', now())
-                ->count(),
-            'pending' => Subscription::where('status', 'pending')->count(),
-            'expired' => Subscription::where('end_date', '<', now())->count(),
-            'cancelled' => Subscription::where('status', 'cancelled')->count(),
-        ];
-        
-        // Get subscriptions by type
-        $subscriptionsByType = Subscription::where('status', 'active')
+/**
+ * Generate subscription report.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\Response
+ */
+public function report(Request $request)
+{
+    // Get subscription statistics
+    $stats = [
+        'total' => Subscription::count(),
+        'active' => Subscription::where('status', 'active')
             ->where('end_date', '>=', now())
-            ->selectRaw('type, COUNT(*) as count')
-            ->groupBy('type')
-            ->get();
-            
-        // Get monthly revenue
-        $monthlyRevenue = Payment::where('status', 'paid')
-            ->whereYear('date', now()->year)
-            ->selectRaw('MONTH(date) as month, SUM(amount) as total')
-            ->groupBy('month')
-            ->get();
-            
-        // Prepare monthly data for chart
-        $chartData = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $monthData = $monthlyRevenue->firstWhere('month', $i);
-            $chartData[$i] = $monthData ? $monthData->total : 0;
-        }
+            ->count(),
+        'pending' => Subscription::where('status', 'pending')->count(),
+        'expired' => Subscription::where('end_date', '<', now())->count(),
+        'cancelled' => Subscription::where('status', 'cancelled')->count(),
+    ];
+    
+    // Get subscriptions by type
+    $subscriptionsByType = Subscription::where('status', 'active')
+        ->where('end_date', '>=', now())
+        ->selectRaw('type, COUNT(*) as count')
+        ->groupBy('type')
+        ->get();
         
-        // Get recent subscriptions
-        $recentSubscriptions = Subscription::with('user')
-            ->orderBy('created_at', 'desc')
-            ->take(10)
-            ->get();
-            
-        return view('admin.subscriptions.report', compact(
-            'stats',
-            'subscriptionsByType',
-            'chartData',
-            'recentSubscriptions'
-        ));
+    // Get monthly revenue - PostgreSQL compatible
+    $monthlyRevenue = Payment::where('status', 'paid')
+        ->whereRaw('EXTRACT(YEAR FROM date) = ?', [now()->year])
+        ->selectRaw('EXTRACT(MONTH FROM date) as month, SUM(amount) as total')
+        ->groupBy('month')
+        ->get();
+        
+    // Prepare monthly data for chart
+    $chartData = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $monthData = $monthlyRevenue->firstWhere('month', $i);
+        $chartData[$i] = $monthData ? $monthData->total : 0;
     }
     
+    // Get recent subscriptions
+    $recentSubscriptions = Subscription::with('user')
+        ->orderBy('created_at', 'desc')
+        ->take(10)
+        ->get();
+        
+    return view('admin.subscriptions.report', compact(
+        'stats',
+        'subscriptionsByType',
+        'chartData',
+        'recentSubscriptions'
+    ));
+}    
     /**
      * Export subscriptions to CSV.
      *

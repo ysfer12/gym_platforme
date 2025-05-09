@@ -48,7 +48,7 @@
                                 </svg>
                                 Filter Sessions
                             </h2>
-                            <form action="{{ route('member.sessions') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                            <form action="{{ route('member.sessions') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-5">
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Session Type</label>
                                     <div class="relative">
@@ -75,6 +75,23 @@
                                             <option value="Beginner" {{ request('level') == 'Beginner' ? 'selected' : '' }}>Beginner</option>
                                             <option value="Intermediate" {{ request('level') == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
                                             <option value="Advanced" {{ request('level') == 'Advanced' ? 'selected' : '' }}>Advanced</option>
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Added City Filter -->
+                                <div>
+                                    <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                                    <div class="relative">
+                                        <select id="city" name="city" class="block w-full pl-3 pr-10 py-2.5 text-base border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200">
+                                            <option value="">All Cities</option>
+                                            @foreach($cities as $city)
+                                                <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
+                                            @endforeach
                                         </select>
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
                                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -178,6 +195,14 @@
                                                         <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
                                                             {{ $session->level }}
                                                         </span>
+                                                        <!-- City badge -->
+                                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 inline mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            </svg>
+                                                            {{ $session->city }}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3 sm:mt-0">
@@ -189,7 +214,7 @@
                                                             Booked
                                                         </span>
                                                     @else
-                                                        <form action="{{ route('member.sessions-post', $session) }}" method="POST">
+                                                        <form action="{{ route('member.sessions.book', $session) }}" method="POST">
                                                             @csrf
                                                             <button type="submit" class="group inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-md text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all duration-200">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-4 w-4 transform group-hover:scale-110 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">

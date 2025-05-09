@@ -225,8 +225,8 @@ class ReportController extends Controller
         
         // Get new members this month
         $newMembers = User::where('role', 'Member')
-            ->whereMonth('registrationDate', Carbon::now()->month)
-            ->whereYear('registrationDate', Carbon::now()->year)
+            ->whereRaw('EXTRACT(MONTH FROM "registrationDate") = ?', [Carbon::now()->month])
+            ->whereRaw('EXTRACT(YEAR FROM "registrationDate") = ?', [Carbon::now()->year])
             ->count();
         
         // Get monthly signups for the last 12 months
@@ -236,8 +236,8 @@ class ReportController extends Controller
             $month = $date->format('M Y');
             
             $count = User::where('role', 'Member')
-                ->whereMonth('registrationDate', $date->month)
-                ->whereYear('registrationDate', $date->year)
+                ->whereRaw('EXTRACT(MONTH FROM "registrationDate") = ?', [$date->month])
+                ->whereRaw('EXTRACT(YEAR FROM "registrationDate") = ?', [$date->year])
                 ->count();
             
             $monthlySignups[$month] = $count;
@@ -317,7 +317,7 @@ $lowActiveCount = User::where('role', 'Member')
         // Calculate renewal rate
         $renewalRate = 70; // Default value as placeholder
         
-// Calculate last 6 months' subscription renewals
+        // Calculate last 6 months' subscription renewals
         $totalExpired = Subscription::where('end_date', '<', Carbon::now())
             ->where('end_date', '>=', Carbon::now()->subMonths(6))
             ->count();
@@ -421,7 +421,7 @@ $lowActiveCount = User::where('role', 'Member')
             }
         }
         
-        // Calculate attendance by day of week - FIX HERE
+        // Calculate attendance by day of week - UPDATED FOR POSTGRESQL
         $attendanceByDay = [0, 0, 0, 0, 0, 0, 0]; // Mon to Sun
         
         // Using PostgreSQL EXTRACT(DOW) instead of MySQL DAYOFWEEK
@@ -535,10 +535,10 @@ $lowActiveCount = User::where('role', 'Member')
         // Set default year if not provided
         $year = $request->year ? intval($request->year) : date('Y');
         
-        // Get new members by month for the year
+        // Get new members by month for the year - UPDATED FOR POSTGRESQL
         $newMembers = User::where('role', 'Member')
-            ->whereYear('registrationDate', $year)
-            ->select(DB::raw('MONTH(registrationDate) as month'), DB::raw('count(*) as count'))
+            ->whereRaw('EXTRACT(YEAR FROM "registrationDate") = ?', [$year])
+            ->select(DB::raw('EXTRACT(MONTH FROM "registrationDate") as month'), DB::raw('count(*) as count'))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -569,10 +569,10 @@ $lowActiveCount = User::where('role', 'Member')
             $cumulativeMemberCount[] = $runningTotal;
         }
         
-        // Get cancellations by month
+        // Get cancellations by month - UPDATED FOR POSTGRESQL
         $cancellations = User::where('role', 'Member')
-            ->whereYear('deletionDate', $year)
-            ->select(DB::raw('MONTH(deletionDate) as month'), DB::raw('count(*) as count'))
+            ->whereRaw('EXTRACT(YEAR FROM "deletionDate") = ?', [$year])
+            ->select(DB::raw('EXTRACT(MONTH FROM "deletionDate") as month'), DB::raw('count(*) as count'))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -727,9 +727,9 @@ $lowActiveCount = User::where('role', 'Member')
         $chartLabels = [];
         $chartData = [];
         
-        // Define SQL date format based on grouping
-        $dateFormat = $request->grouping === 'daily' ? '%Y-%m-%d' :
-                     ($request->grouping === 'weekly' ? '%Y-%u' : '%Y-%m');
+        // Define PostgreSQL date format based on grouping
+        $dateFormat = $request->grouping === 'daily' ? 'YYYY-MM-DD' :
+                     ($request->grouping === 'weekly' ? 'YYYY-IW' : 'YYYY-MM');
         
         // Label format for display
         $labelFormat = $request->grouping === 'daily' ? 'M d, Y' :
@@ -737,10 +737,10 @@ $lowActiveCount = User::where('role', 'Member')
         
         switch ($request->report_type) {
             case 'member':
-                // New member registrations
+                // New member registrations - UPDATED FOR POSTGRESQL
                 $reportData = User::where('role', 'Member')
                     ->whereBetween('registrationDate', [$startDate, $endDate])
-                    ->select(DB::raw("DATE_FORMAT(registrationDate, '{$dateFormat}') as date_group"), 
+                    ->select(DB::raw("TO_CHAR(\"registrationDate\", '{$dateFormat}') as date_group"), 
                              DB::raw('count(*) as count'))
                     ->groupBy('date_group')
                     ->orderBy('date_group')
@@ -766,10 +766,10 @@ $lowActiveCount = User::where('role', 'Member')
                 break;
                 
             case 'revenue':
-                // Revenue
+                // Revenue - UPDATED FOR POSTGRESQL
                 $reportData = Payment::where('status', 'paid')
                     ->whereBetween('date', [$startDate, $endDate])
-                    ->select(DB::raw("DATE_FORMAT(date, '{$dateFormat}') as date_group"), 
+                    ->select(DB::raw("TO_CHAR(date, '{$dateFormat}') as date_group"), 
                              DB::raw('sum(amount) as total'))
                     ->groupBy('date_group')
                     ->orderBy('date_group')
@@ -792,9 +792,9 @@ $lowActiveCount = User::where('role', 'Member')
                 break;
                 
             case 'attendance':
-                // Attendance
+                // Attendance - UPDATED FOR POSTGRESQL
                 $reportData = Attendance::whereBetween('date', [$startDate, $endDate])
-                    ->select(DB::raw("DATE_FORMAT(date, '{$dateFormat}') as date_group"), 
+                    ->select(DB::raw("TO_CHAR(date, '{$dateFormat}') as date_group"), 
                              DB::raw('count(*) as count'))
                     ->groupBy('date_group')
                     ->orderBy('date_group')
@@ -817,9 +817,9 @@ $lowActiveCount = User::where('role', 'Member')
                 break;
                 
             case 'subscription':
-                // New subscriptions
+                // New subscriptions - UPDATED FOR POSTGRESQL
                 $reportData = Subscription::whereBetween('start_date', [$startDate, $endDate])
-                    ->select(DB::raw("DATE_FORMAT(start_date, '{$dateFormat}') as date_group"), 
+                    ->select(DB::raw("TO_CHAR(start_date, '{$dateFormat}') as date_group"), 
                              DB::raw('count(*) as count'))
                     ->groupBy('date_group')
                     ->orderBy('date_group')
